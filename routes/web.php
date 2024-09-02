@@ -2,7 +2,14 @@
 
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia; 
+use App\Models\Reviewer;
 
 Route::get('/', function () {
-    return Inertia::render('Home');
+
+    $reviewers = Reviewer::get()->toArray();
+
+
+    return Inertia::render('Home',[
+        'reviewers' => $reviewers
+    ]);
 });

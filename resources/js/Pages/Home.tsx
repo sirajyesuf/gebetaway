@@ -2,7 +2,9 @@ import React from "react";
 import { Head } from "@inertiajs/inertia-react";
 import AppBar from "@/components/AppBar";
 import Hero from "@/components/Hero";
-export default function Home() {
+import GebetaSearch from "@/components/GebetaSearch";
+export default function Home({reviewers}) {
+    console.log(reviewers);
     return (
         <>
             <AppBar></AppBar>
@@ -14,6 +16,7 @@ export default function Home() {
                 <div className="capitalize text-xl text-black font-bold mb-10">
                     Discover
                 </div>
+                <GebetaSearch reviewers={reviewers} />
             </main>
         </>
     );
