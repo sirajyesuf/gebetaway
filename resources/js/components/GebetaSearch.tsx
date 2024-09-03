@@ -12,28 +12,30 @@ import { ScrollArea } from "@/components/ui/scroll-area";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Separator } from "@/components/ui/separator";
 import { Reviewer as TypeReviewer } from "@/types/reviewer";
+import useSearchParams from "@/hooks/useUrlSearchParams";
+
 function RestaurantSearch() {
-    // const router = useRouter();
-    // const searchParams = useSearchParams();
+    const searchParams = useSearchParams();
 
-    const [restaurant, setRestaurant] = useState("");
-    // searchParams.get("restaurant") || ""
-    // const updateURL = useCallback(
-    //     (name: string, value: string) => {
-    //         const params = new URLSearchParams(searchParams.toString());
-    //         if (value) {
-    //             params.set(name, value);
-    //         } else {
-    //             params.delete(name);
-    //         }
-    //         router.push(`/?${params.toString()}`, { scroll: false });
-    //     },
-    //     [router, searchParams]
-    // );
+    const [restaurant, setRestaurant] = useState(
+        searchParams.get("restaurant") || ""
+    );
+    const updateURL = useCallback(
+        (name: string, value: string) => {
+            if (value) {
+                searchParams.set(name, value);
+            } else {
+                searchParams.delete(name);
+            }
 
-    // useEffect(() => {
-    //     updateURL("restaurant", restaurant);
-    // }, [restaurant, updateURL]);
+            // router.push(`/?${params.toString()}`, { scroll: false });
+        },
+        [searchParams]
+    );
+
+    useEffect(() => {
+        updateURL("restaurant", restaurant);
+    }, [restaurant, updateURL]);
 
     return (
         <div className="w-full relative">
@@ -61,23 +63,22 @@ function RestaurantSearch() {
 }
 
 function Address() {
-    // const router = useRouter();
-    // const searchParams = useSearchParams();
-    const [location, setLocation] = useState("");
-    // searchParams.get("location") || ""
+    const searchParams = useSearchParams();
+    const [location, setLocation] = useState(
+        searchParams.get("location") || ""
+    );
 
-    // const updateURL = useCallback(
-    //     (name: string, value: string) => {
-    //         const params = new URLSearchParams(searchParams.toString());
-    //         if (value) {
-    //             params.set("location", value);
-    //         } else {
-    //             params.delete("location");
-    //         }
-    //         router.push(`/?${params.toString()}`, { scroll: false });
-    //     },
-    //     [router, searchParams]
-    // );
+    const updateURL = useCallback(
+        (name: string, value: string) => {
+            if (value) {
+                searchParams.set("location", value);
+            } else {
+                searchParams.delete("location");
+            }
+            // router.push(`/?${params.toString()}`, { scroll: false });
+        },
+        [searchParams]
+    );
 
     const handleGetLocation = () => {
         if ("geolocation" in navigator) {
@@ -97,9 +98,9 @@ function Address() {
         }
     };
 
-    // useEffect(() => {
-    //     updateURL("location", location);
-    // }, [location, updateURL]);
+    useEffect(() => {
+        updateURL("location", location);
+    }, [location, updateURL]);
 
     return (
         <div className="relative">
@@ -138,83 +139,56 @@ function Reviewer({ reviewer }) {
 }
 
 function ReviewerFilter({ reviewers }) {
-    // const router = useRouter();
-    // const searchParams = useSearchParams();
-    // const [reviewers, setReviewers] = useState(reviewers);
-    // const [isLoading, setIsLoading] = useState(true);
-    // const [error, setError] = useState<string | null>(null);
+    const searchParams = useSearchParams();
     const [searchquery, setSearchQuery] = useState("");
-    const [selectedReviewers, setSelectedReviewers] = useState<string[]>([]);
-    // useEffect(() => {
-    //     async function fetchOptions() {
-    //         try {
-    //             setIsLoading(true);
-    //             const { data, error } = await supabase
-    //                 .from("reviewers")
-    //                 .select();
-
-    //             if (error) throw error;
-    //             console.log(data);
-
-    //             setReviewers(data);
-    //         } catch (e) {
-    //             setError("Failed to fetch reviewers");
-    //             console.error(e);
-    //         } finally {
-    //             setIsLoading(false);
-    //         }
-    //     }
-
-    //     fetchOptions();
-    // }, []);
+    const [selectedReviewers, setSelectedReviewers] = useState<string[]>(() => {
+        const reviewersParams = searchParams.get("reviewers");
+        return reviewersParams
+            ? reviewersParams.split(",").filter(Boolean)
+            : [];
+    });
 
     const filteredReviewer = reviewers.filter((rev: any) =>
         rev.name.toLowerCase().includes(searchquery.toLowerCase())
     );
 
-    // const updateURL = useCallback(
-    //     (updates: Record<string, string>) => {
-    //         const params = new URLSearchParams(searchParams.toString());
-    //         Object.entries(updates).forEach(([key, value]) => {
-    //             if (value) {
-    //                 params.set(key, value);
-    //             } else {
-    //                 params.delete(key);
-    //             }
-    //         });
-    //         router.push(`/?${params.toString()}`, { scroll: false });
-    //     },
-    //     [router, searchParams]
-    // );
+    const updateURL = useCallback(
+        (value: string) => {
+            if (value) {
+                searchParams.set("reviewers", value);
+            } else {
+                searchParams.delete("reviewers");
+            }
+        },
+        [searchParams]
+    );
 
-    // useEffect(() => {
-    //     if (selectedReviewers.length > 0) {
-    //         updateURL({ reviewers: selectedReviewers.join(",") });
-    //     } else {
-    //         updateURL({ reviewers: "" });
-    //     }
-    // }, [selectedReviewers, updateURL]);
+    useEffect(() => {
+        if (selectedReviewers.length > 0) {
+            updateURL(selectedReviewers.join(", "));
+        } else {
+            updateURL("");
+        }
+    }, [selectedReviewers, updateURL]);
 
-    function handleSelect(reviewerId: string) {
-        const newSelectedReviewers = selectedReviewers.includes(reviewerId)
-            ? selectedReviewers.filter((id) => id !== reviewerId)
-            : [...selectedReviewers, reviewerId];
+    function handleSelect(tiktok_handler: string) {
+        const newSelectedReviewers = selectedReviewers.includes(tiktok_handler)
+            ? selectedReviewers.filter((rev) => rev !== tiktok_handler)
+            : [...selectedReviewers, tiktok_handler];
+
         setSelectedReviewers(newSelectedReviewers);
     }
 
-    // if (isLoading) return <p>Loading options...</p>;
-    // if (error) return <p>Error: {error}</p>;
-
     return (
         <div className="flex gap-2 flex-wrap justify-start items-center">
-            {selectedReviewers.map((rev: TypeReviewer, index) => (
+            {selectedReviewers.map((rev: string, index) => (
                 <Button
                     key={index}
                     variant="ghost"
                     className="border-2 border-[#ff3b5c]  rounded-full bg-[#f3f4f6] hover:bg-gray-300"
-                    onClick={() => handleSelect(rev.tiktok_handler)}
+                    onClick={() => handleSelect(rev)}
                 >
-                    <p className="text-black text-md font-bold">{rev}</p>
+                    <p className="text-black text-md font-bold">@{rev}</p>
                 </Button>
             ))}
             <Popover>
@@ -224,7 +198,7 @@ function ReviewerFilter({ reviewers }) {
                         className="flex gap-2 border-2 border-[#222222] rounded-full capitalize font-bold text-lg bg-white text-black"
                     >
                         Reviewer
-                        <ListFilter/>
+                        <ListFilter />
                     </Button>
                 </PopoverTrigger>
                 <PopoverContent className="w-80">

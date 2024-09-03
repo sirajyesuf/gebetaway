@@ -3,8 +3,7 @@ import { Head } from "@inertiajs/inertia-react";
 import AppBar from "@/components/AppBar";
 import Hero from "@/components/Hero";
 import GebetaSearch from "@/components/GebetaSearch";
-export default function Home({reviewers}) {
-    console.log(reviewers);
+export default function Home({ reviewers }) {
     return (
         <>
             <AppBar></AppBar>
