@@ -1,14 +1,11 @@
 <?php
 
-use App\Models\Reviewer;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\ReviewController;
 use Inertia\Inertia;
 
-Route::get('/', function () {
+Route::get('/',[ReviewController::class,'index']);
 
-    $reviewers = Reviewer::get()->toArray();
-
-    return Inertia::render('Home', [
-        'reviewers' => $reviewers,
-    ]);
+Route::get('/about',function(){
+    return Inertia::render('About');
 });

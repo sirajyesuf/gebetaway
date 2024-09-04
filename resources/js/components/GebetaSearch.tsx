@@ -13,6 +13,8 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Separator } from "@/components/ui/separator";
 import { Reviewer as TypeReviewer } from "@/types/reviewer";
 import useSearchParams from "@/hooks/useUrlSearchParams";
+import { router } from "@inertiajs/react";
+import TikTokVideo from "@/components/TikTokVideo";
 
 function RestaurantSearch() {
     const searchParams = useSearchParams();
@@ -216,8 +218,7 @@ function ReviewerFilter({ reviewers }) {
                             value={searchquery}
                             type="text"
                             onChange={(e) => {
-                                const value = e.target.value;
-                                setSearchQuery(value);
+                                setSearchQuery(e.target.value);
                             }}
                         />
 
@@ -275,7 +276,18 @@ function ReviewerFilter({ reviewers }) {
     );
 }
 function GebetaSearch({ reviewers }) {
-    console.log(reviewers);
+    const searchParams = useSearchParams();
+
+    function search() {
+        const restaurant_name = searchParams.get("restaurant") || "";
+        router.visit("/", {
+            method: "get",
+            data: {
+                restaurant: restaurant_name,
+            },
+            preserveScroll: true,
+        });
+    }
     return (
         <>
             <div className="flex flex-col">
@@ -289,7 +301,10 @@ function GebetaSearch({ reviewers }) {
                             <Address></Address>
                         </div>
                     </div>
-                    <Button className="bg-white border-2 border-[#ca3b19] text-[#ca3b19] text-md">
+                    <Button
+                        className="bg-white border-2 border-[#ca3b19] text-[#ca3b19] text-md"
+                        onClick={() => search()}
+                    >
                         Search
                     </Button>
                 </div>

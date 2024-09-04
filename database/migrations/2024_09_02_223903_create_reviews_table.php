@@ -15,10 +15,12 @@ return new class extends Migration
             $table->id();
             $table->string('restaurant_name');
             $table->string('restaurant_address');
-            $table->string('restaurant_location');
+            $table->string('restaurant_location')->nullable();
             $table->string('reviewer_tiktok_handler');
             $table->text('tiktok_video_url');
+            $table->text('tiktok_video_embed');
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 
