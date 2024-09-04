@@ -21,7 +21,7 @@
 <body class="font-san s antialiased bg-[#ffffff]">
     @inertia
     <!-- TikTok Embed Script -->
-    <script async src="https://www.tiktok.com/embed.js"></script>
+    {{-- <script async src="https://www.tiktok.com/embed.js"></script> --}}
 </body>
 
 </html>

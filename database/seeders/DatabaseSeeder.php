@@ -14,7 +14,7 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        Reviewer::factory(10)->create();
+        // Reviewer::factory(10)->create();
         Review::factory(10)->create(); 
 
     }
