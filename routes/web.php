@@ -12,10 +12,14 @@ Route::get('/',[ReviewController::class,'index']);
 Route::get('/reviews',function(Request $request){
 
     $restaurant_name = $request->restaurant;
-    
+    $reviewers  = $request->input('reviewers');
+
     $reviews = Review::query()
     ->when($restaurant_name, function ($query, $restaurant_name) {
         return $query->where('restaurant_name', 'like', '%' . $restaurant_name . '%');
+    })
+    ->when($reviewers!=null, function ($query, $reviewers) {
+        return $query->whereIn('reviewer_id', explode(',',$reviewers));
     })
     ->paginate(5);
 
