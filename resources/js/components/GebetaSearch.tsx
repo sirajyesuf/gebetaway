@@ -6,6 +6,7 @@ import {
     ChevronsUpDown,
     Check,
     X,
+    CheckIcon,
 } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
@@ -192,7 +193,18 @@ function Address() {
 
 function Reviewer({ reviewer }) {
     return (
-        <div className="w-full flex gap-2 items-center px-2">
+        // <div className="w-full flex gap-2 items-center px-2">
+        // <Avatar className="border-2 border-[#ff3b5c]">
+        //     <AvatarImage
+        //         src="https://p16-sign-va.tiktokcdn.com/tos-maliva-avt-0068/dd5ec6adf36e6b504ecf0f0989e24c26~c5_1080x1080.jpeg?lk3s=a5d48078&nonce=22065&refresh_token=34caa5b9f42d94f71b1ba957db90bfa9&x-expires=1724547600&x-signature=KO9RQK47fHaDiXZhm6dIvUDzEjw%3D&shp=a5d48078&shcp=81f88b70"
+        //         alt="@shadcn"
+        //     />
+        //     <AvatarFallback className="bg-white">SG</AvatarFallback>
+        // </Avatar>
+        // <div className="font-bold"> {reviewer.name}</div>
+        // {/* </div> */}
+
+        <span className="flex space-x-2 items-center p-[3px]">
             <Avatar className="border-2 border-[#ff3b5c]">
                 <AvatarImage
                     src="https://p16-sign-va.tiktokcdn.com/tos-maliva-avt-0068/dd5ec6adf36e6b504ecf0f0989e24c26~c5_1080x1080.jpeg?lk3s=a5d48078&nonce=22065&refresh_token=34caa5b9f42d94f71b1ba957db90bfa9&x-expires=1724547600&x-signature=KO9RQK47fHaDiXZhm6dIvUDzEjw%3D&shp=a5d48078&shcp=81f88b70"
@@ -200,8 +212,8 @@ function Reviewer({ reviewer }) {
                 />
                 <AvatarFallback className="bg-white">SG</AvatarFallback>
             </Avatar>
-            <div className="font-bold"> {reviewer.name}</div>
-        </div>
+            <span>{reviewer.name.toUpperCase()}</span>
+        </span>
     );
 }
 
@@ -268,71 +280,76 @@ function ReviewerFilter({ reviewers }) {
                         <ListFilter />
                     </Button>
                 </DialogTrigger>
-                <DialogContent className="w-80 bg-white text-black">
-                    <div className="space-y-2">
-                        <h4 className="font-medium leading-none">Reviewer</h4>
-                        <p className="text-sm text-black font-bold">
-                            select your favourite food reviewer
-                        </p>
-                    </div>
+                <DialogContent className="sm:h-auto h=[100svh] sm:w-auto w-full bg-white">
+                    <div className="mx-auto w-[95%] max-w-sm p-2">
+                        <DialogHeader>
+                            <DialogTitle>Reviewer</DialogTitle>
+                            <DialogDescription>
+                                Select Your Favourite Food Reviewer
+                            </DialogDescription>
+                        </DialogHeader>
 
-                    <div className="flex flex-col space-y-4 py-4">
-                        <input
-                            className="text-md border p-2 rounded-md"
-                            placeholder="Search Food Reviewer"
-                            value={searchquery}
-                            type="text"
-                            onChange={(e) => {
-                                setSearchQuery(e.target.value);
-                            }}
-                        />
+                        <div className="flex flex-col space-y-4 py-4">
+                            <input
+                                className="text-lg border-2 border-[#f4f3f3] px-4 py-1 rounded-md"
+                                placeholder="shegergebeta"
+                                value={searchquery}
+                                type="text"
+                                onChange={(e) => {
+                                    setSearchQuery(e.target.value);
+                                }}
+                            />
 
-                        <div className="w-[100%]">
-                            <ScrollArea className="sm:h-96 h-[77shv]  w-[100%] rounded-lg border-2">
-                                {filteredReviewer.length > 0 ? (
-                                    filteredReviewer.map(
-                                        (
-                                            reviewer: TypeReviewer,
-                                            index: number
-                                        ) => (
-                                            <div
-                                                key={index}
-                                                className="w-[100%]"
-                                            >
-                                                <Button
-                                                    size="lg"
-                                                    variant="ghost"
-                                                    className="rounded-none w-[100%] h-[20] flex items-center text-left justify-between px-4 py-2"
-                                                    onClick={() =>
-                                                        handleSelect(
-                                                            reviewer.tiktok_handler
-                                                        )
-                                                    }
+                            <ul className="w-[100%]">
+                                <ScrollArea className="sm:h-96 h-[77shv]  w-[100%] rounded-lg border-2 border-[#f4f3f3]">
+                                    {filteredReviewer.length > 0 ? (
+                                        filteredReviewer.map(
+                                            (
+                                                reviewer: TypeReviewer,
+                                                index: number
+                                            ) => (
+                                                <li
+                                                    key={index}
+                                                    className="w-[100%]"
                                                 >
-                                                    <Reviewer
-                                                        reviewer={reviewer}
-                                                    ></Reviewer>
-                                                </Button>
-                                                {index <
-                                                    reviewers.length - 1 && (
-                                                    <Separator />
-                                                )}
-                                            </div>
+                                                    <Button
+                                                        size="lg"
+                                                        variant="ghost"
+                                                        className="rounded-none w-[100%] h-[20] flex items-center text-left justify-between px-4 hover:bg-[#f7f7f3] hover:text-black"
+                                                        onClick={() =>
+                                                            handleSelect(
+                                                                reviewer.tiktok_handler
+                                                            )
+                                                        }
+                                                    >
+                                                        {/* {reviewer.tiktok_handler} */}
+                                                        <Reviewer
+                                                            reviewer={reviewer}
+                                                        ></Reviewer>
+                                                        {selectedReviewers.includes(
+                                                            reviewer.tiktok_handler
+                                                        ) && <CheckIcon />}
+                                                    </Button>
+                                                    {index <
+                                                        reviewers.length -
+                                                            1 && <Separator className="bg-[#f4f3f3]" />}
+                                                </li>
+                                            )
                                         )
-                                    )
-                                ) : (
-                                    <>
-                                        <Button
-                                            size="lg"
-                                            variant="ghost"
-                                            className="rounded-none w-[100%] h-[20] flex items-center text-left justify-between px-4 py-2"
-                                        >
-                                            no result found
-                                        </Button>
-                                        <Separator></Separator>
-                                    </>
-                                )}
-                            </ScrollArea>
+                                    ) : (
+                                        <>
+                                            <Button
+                                                size="lg"
+                                                variant="ghost"
+                                                className="rounded-none w-[100%] h-[20] flex items-center text-left justify-between px-4 py-2"
+                                            >
+                                                no result found
+                                            </Button>
+                                            <Separator></Separator>
+                                        </>
+                                    )}
+                                </ScrollArea>
+                            </ul>
                         </div>
                     </div>
                 </DialogContent>
@@ -471,14 +488,14 @@ function GebetaSearch({ reviewers, categories }) {
 
     return (
         <>
-            <div className="flex flex-col justify-center  border-2 p-4">
+            <div className="flex flex-col justify-center  border-none p-1">
                 {/* <div className="w-[90%] md:w-[90%] flex flex-row md:flex-row gap-4 justify-evenly  p-1 items-center"> */}
                 <div className="w-full border-2 border-[#ca3b19] px-2  rounded-full  flex justify-between  items-center gap-2 py-[2px]">
                     <div className="w-[90%]">
                         <Address></Address>
                     </div>
                     <Button
-                        className="bg-[#ca3b19] border-2 border-none rounded-full text-[rgb(249,245,245)] text-md hover:bg-black"
+                        className="bg-[#ca3b19] border-2 border-none rounded-full text-[rgb(249,245,245)] text-md hover:bg-black hidden md:block"
                         onClick={() => search()}
                     >
                         Search

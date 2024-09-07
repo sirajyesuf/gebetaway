@@ -42,7 +42,7 @@ class ReviewController extends Controller
     ->when($categories, function ($query, $categories) {
         return $query->whereRaw('LOWER(categories) like ?', ['%' . strtolower($categories) . '%']);
     })
-    ->paginate(30);
+    ->paginate(5);
 
 
     return Inertia::render('Home', [

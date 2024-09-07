@@ -90,9 +90,9 @@ export default function Home(props) {
 
             <main
                 id="main"
-                className="container mt-2 p-2 h-screen  flex flex-col gap-4 text-black"
+                className="md:container h-auto  flex flex-col gap-4  text-black border-4 p-1 "
             >
-                <div className="capitalize text-xl text-black font-bold mb-10">
+                <div className="capitalize text-2xl font-bold">
                     Discover
                 </div>
                 <GebetaSearch reviewers={props.reviewers} categories = {props.categories} />
