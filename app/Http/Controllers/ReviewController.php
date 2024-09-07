@@ -11,10 +11,20 @@ use App\Http\Resources\ReviewResource;
 class ReviewController extends Controller
 {
     public function index(Request $request) {
-    
+
+    $allCategories = Review::distinct('categories')->pluck('categories')->toArray();
+    $uniqueCategories = collect($allCategories)
+    ->flatMap(function ($item) {
+    return json_decode($item, true); // Decode JSON for each row
+    })
+    ->unique() // Get only unique values
+    ->values() // Reset the array keys
+    ->toArray();
+
     $restaurant_name = $request->restaurant;
     $selected_reviewers  = $request->input('reviewers');
     $location = $request->input('location');
+    $categories = $request->input('categories');
     
     // dump($selected_reviewers);
 
@@ -29,11 +39,15 @@ class ReviewController extends Controller
     ->when($location, function ($query, $location) {
         return $query->whereRaw('LOWER(restaurant_address) like ?', ['%' . strtolower($location) . '%']);
     })
-    ->paginate(5);
+    ->when($categories, function ($query, $categories) {
+        return $query->whereRaw('LOWER(categories) like ?', ['%' . strtolower($categories) . '%']);
+    })
+    ->paginate(30);
 
 
     return Inertia::render('Home', [
         'reviewers' => Reviewer::get()->toArray(),
+        'categories' => $uniqueCategories,
         'reviews' => ReviewResource::collection($reviews),
     ]);
 

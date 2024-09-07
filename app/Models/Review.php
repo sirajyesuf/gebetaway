@@ -10,4 +10,8 @@ class Review extends Model
 {
     use HasFactory;
     use SoftDeletes;
+
+    protected $casts  = [
+        'json' => 'array'
+    ];
 }
