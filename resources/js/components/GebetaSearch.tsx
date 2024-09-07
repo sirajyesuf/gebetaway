@@ -1,12 +1,30 @@
-import { Search, MoveLeft, MapPin, ListFilter } from "lucide-react";
-import { Button } from "@/components/ui/button";
+import {
+    Search,
+    MoveLeft,
+    MapPin,
+    ListFilter,
+    ChevronsUpDown,
+    Check,
+    X,
+} from "lucide-react";
 import { Input } from "@/components/ui/input";
+import { Button } from "@/components/ui/button";
+import { Label } from "@/components/ui/label";
 import { useCallback, useEffect, useState } from "react";
 import {
     Popover,
     PopoverContent,
     PopoverTrigger,
 } from "@/components/ui/popover";
+import {
+    Dialog,
+    DialogContent,
+    DialogDescription,
+    DialogFooter,
+    DialogHeader,
+    DialogTitle,
+    DialogTrigger,
+} from "@/components/ui/dialog";
 import { ScrollArea } from "@/components/ui/scroll-area";
 
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
@@ -15,6 +33,16 @@ import { Reviewer as TypeReviewer } from "@/types/reviewer";
 import useSearchParams from "@/hooks/useUrlSearchParams";
 import { router } from "@inertiajs/react";
 import TikTokVideo from "@/components/TikTokVideo";
+import { Toggle } from "@/components/ui/toggle";
+import { cn } from "@/lib/utils";
+import {
+    Command,
+    CommandEmpty,
+    CommandGroup,
+    CommandInput,
+    CommandItem,
+} from "@/components/ui/command";
+import { Badge } from "@/components/ui/badge";
 
 function RestaurantSearch() {
     const searchParams = useSearchParams();
@@ -72,6 +100,10 @@ function Address() {
 
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState<string | null>(null);
+
+    function clear() {
+        setLocation("");
+    }
 
     const updateURL = useCallback(
         (name: string, value: string) => {
@@ -132,16 +164,28 @@ function Address() {
                 value={location}
                 placeholder="Figa, road to summit fird bet. In front of kaldis coffee"
                 onChange={(e) => setLocation(e.target.value)}
-                className="pl-12 border-none text-sm focus-visible:ring-0 focus-visible:ring-offset-0 focus-visible:border-primary bg-white text-black"
+                className="pl-14 text-lg text-black bg-white  border-none focus-visible:ring-0 focus-visible:ring-offset-0 focus-visible:border-primary"
             />
             <Button
-                variant="ghost"
-                size="icon"
-                className="absolute left-1 top-1/2 -translate-y-1/2 bg-white text-black"
+                variant="outline"
+                size={null}
+                className="absolute left-1 top-1/2 -translate-y-1/2 bg-white border-none hover:bg-[#c44015] p-1 rounded-full"
                 onClick={handleGetLocation}
             >
-                <MapPin className="h-5 w-5" />
+                <MapPin className="h-6 w-6" />
             </Button>
+            {location ? (
+                <Button
+                    variant="ghost"
+                    size={null}
+                    className="absolute right-1 top-1/2 -translate-y-1/2  border-none hover:bg-[#c44015] rounded-full p-1"
+                    onClick={clear}
+                >
+                    <X className="h-6 w-6" />
+                </Button>
+            ) : (
+                ""
+            )}
         </div>
     );
 }
@@ -166,8 +210,6 @@ function ReviewerFilter({ reviewers }) {
     const [searchquery, setSearchQuery] = useState("");
     const [selectedReviewers, setSelectedReviewers] = useState<string[]>(() => {
         const reviewersParams = searchParams.get("reviewers");
-        console.log("rev filter");
-        console.log(reviewersParams);
         return reviewersParams
             ? reviewersParams.split(",").filter(Boolean)
             : [];
@@ -216,8 +258,8 @@ function ReviewerFilter({ reviewers }) {
                     <p className="text-black text-md font-bold">@{rev}</p>
                 </Button>
             ))}
-            <Popover>
-                <PopoverTrigger asChild>
+            <Dialog>
+                <DialogTrigger asChild>
                     <Button
                         variant="outline"
                         className="flex gap-2 border-2 border-[#222222] rounded-full capitalize font-bold text-lg bg-white text-black"
@@ -225,8 +267,8 @@ function ReviewerFilter({ reviewers }) {
                         Reviewer
                         <ListFilter />
                     </Button>
-                </PopoverTrigger>
-                <PopoverContent className="w-80 bg-white text-black">
+                </DialogTrigger>
+                <DialogContent className="w-80 bg-white text-black">
                     <div className="space-y-2">
                         <h4 className="font-medium leading-none">Reviewer</h4>
                         <p className="text-sm text-black font-bold">
@@ -293,25 +335,112 @@ function ReviewerFilter({ reviewers }) {
                             </ScrollArea>
                         </div>
                     </div>
-                </PopoverContent>
-            </Popover>
+                </DialogContent>
+            </Dialog>
         </div>
     );
 }
-function GebetaSearch({ reviewers }) {
+function Categories(props) {
     const searchParams = useSearchParams();
+    const categories = props.categories;
+
+    const [selectedCategories, setSelectedCategories] = useState<string[]>(
+        () => {
+            const categoriesParam = searchParams.get("categories");
+            return categoriesParam
+                ? categoriesParam.split(",").filter(Boolean)
+                : [];
+        }
+    );
+
+    const updateURL = useCallback(
+        (value: string) => {
+            if (value) {
+                searchParams.set("categories", value);
+            } else {
+                searchParams.delete("categories");
+            }
+        },
+        [searchParams]
+    );
+
+    useEffect(() => {
+        if (selectedCategories.length > 0) {
+            updateURL(selectedCategories.join(","));
+        } else {
+            updateURL("");
+        }
+    }, [selectedCategories, updateURL]);
+
+    const toggleCategory = (category: string) => {
+        setSelectedCategories((current) =>
+            current.includes(category)
+                ? current.filter((value) => value !== category)
+                : [...current, category]
+        );
+    };
+
+    return (
+        <Dialog>
+            <DialogTrigger asChild>
+                <Button
+                    variant="outline"
+                    className="bg-white border-[#f05b1b] hover:bg-red-500 relative flex gap-2"
+                >
+                    <ListFilter className="h-6 w-6" />
+                    {/* <p> Categories</p> */}
+                    {selectedCategories.length > 0 && (
+                        <span className="absolute -top-2 -right-2 bg-red-600 text-white text-xs font-bold rounded-full h-5 w-5 flex items-center justify-center">
+                            {selectedCategories.length}
+                        </span>
+                    )}
+                </Button>
+            </DialogTrigger>
+            <DialogContent className="w-60 bg-white text-black border-2 border-[#f05b1b]">
+                <div className="grid gap-4">
+                    <div className="space-y-2">
+                        <h4 className="font-medium leading-none f">
+                            Categories
+                        </h4>
+                    </div>
+                    <ScrollArea className="sm:h-96 h-[77shv]  w-[100%] rounded-sm border-2  border-[#f05b1b] p-2">
+                        {categories.map((framework) => (
+                            <>
+                                <Button
+                                    variant="ghost"
+                                    key={framework}
+                                    className="rounded-none w-[100%] h-[20] flex items-center text-left justify-between px-4 py-2"
+                                    onClick={() => toggleCategory(framework)}
+                                >
+                                    {framework}
+                                    {selectedCategories.includes(framework) && (
+                                        <Check className="h-4 w-4" />
+                                    )}
+                                </Button>
+                            </>
+                        ))}
+                    </ScrollArea>
+                </div>
+            </DialogContent>
+        </Dialog>
+    );
+}
+
+function GebetaSearch({ reviewers, categories }) {
+    const searchParams = useSearchParams();
+    console.log("render");
 
     function search() {
         const restaurant_name = searchParams.get("restaurant") || null;
         const reviewers = searchParams.get("reviewers") || null;
         const location = searchParams.get("location") || null;
-        console.log("location when we click search");
-        console.log(reviewers);
+        const categories = searchParams.get("categories") || null;
         let data = {};
         if (restaurant_name !== null) data.restaurant = restaurant_name;
         if (reviewers !== null) data.reviewers = reviewers.replace(/\s+/g, "");
         if (location !== null) data.location = location;
-
+        if (categories !== null)
+            data.categories = categories.replace(/\s+/g, "");
         router.visit("/", {
             method: "get",
             data: data,
@@ -319,26 +448,47 @@ function GebetaSearch({ reviewers }) {
             only: ["reviews"],
         });
     }
+
+    useEffect(() => {
+        const handleSearchParamsChange = () => {
+            // Trigger your search API with the new params
+            // search();
+            // console.log("URL changed");
+            // console.log(window.location.search);
+        };
+
+        // Call initially on mount
+        handleSearchParamsChange();
+
+        // Listen for URL changes (e.g., back/forward navigation)
+        window.addEventListener("popstate", handleSearchParamsChange);
+
+        // Clean up listener on unmount
+        return () => {
+            window.removeEventListener("popstate", handleSearchParamsChange);
+        };
+    }, []);
+
     return (
         <>
-            <div className="flex flex-col">
-                <div className="w-[90%] flex  gap-4 justify-evenly  p-1 items-center">
-                    <div className="w-full border-2 border-[#ca3b19] px-4  rounded-full  flex justify-between  items-center gap-2 ">
-                        <div className="w-[50%]">
-                            <RestaurantSearch></RestaurantSearch>
-                        </div>
-                        <div className="bg-[#ca3b19] w-[2px] h-10 border-1"></div>
-                        <div className="w-[50%]">
-                            <Address></Address>
-                        </div>
+            <div className="flex flex-col justify-center  border-2 p-4">
+                {/* <div className="w-[90%] md:w-[90%] flex flex-row md:flex-row gap-4 justify-evenly  p-1 items-center"> */}
+                <div className="w-full border-2 border-[#ca3b19] px-2  rounded-full  flex justify-between  items-center gap-2 py-[2px]">
+                    <div className="w-[90%]">
+                        <Address></Address>
                     </div>
                     <Button
-                        className="bg-white border-2 border-[#ca3b19] text-[#ca3b19] text-md"
+                        className="bg-[#ca3b19] border-2 border-none rounded-full text-[rgb(249,245,245)] text-md hover:bg-black"
                         onClick={() => search()}
                     >
                         Search
                     </Button>
                 </div>
+
+                <div className="self-start">
+                    {/* <Categories categories={categories}  /> */}
+                </div>
+                {/* </div> */}
                 <div className="w-[90%] flex flex-wrap gap-2 p-2">
                     <ReviewerFilter reviewers={reviewers} />
                 </div>

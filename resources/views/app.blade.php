@@ -18,10 +18,8 @@
     @inertiaHead
 </head>
 
-<body class="font-san s antialiased bg-[#ffffff]">
+<body class="bg-white text-black">
     @inertia
-    <!-- TikTok Embed Script -->
-    {{-- <script async src="https://www.tiktok.com/embed.js"></script> --}}
 </body>
 
 </html>

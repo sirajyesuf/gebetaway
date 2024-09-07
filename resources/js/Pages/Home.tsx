@@ -9,6 +9,7 @@ import { Button } from "@/components/ui/button";
 import { MapPin } from "lucide-react";
 import { router } from "@inertiajs/react";
 import useSearchParams from "@/hooks/useUrlSearchParams";
+import { Input } from "@/components/ui/input";
 
 export default function Home(props) {
     const searchParams = useSearchParams();
@@ -46,7 +47,7 @@ export default function Home(props) {
             router.visit(`/?page=${page}`, {
                 method: "get",
                 data: data,
-                preserveScroll: true,  
+                preserveScroll: true,
             });
         } catch (error) {
             console.error("Error fetching reviews:", error);
@@ -86,14 +87,15 @@ export default function Home(props) {
         <>
             <AppBar></AppBar>
             <Hero></Hero>
+
             <main
                 id="main"
-                className="container mt-2 p-2 h-screen bg-white flex flex-col gap-4 text-black"
+                className="container mt-2 p-2 h-screen  flex flex-col gap-4 text-black"
             >
                 <div className="capitalize text-xl text-black font-bold mb-10">
                     Discover
                 </div>
-                <GebetaSearch reviewers={props.reviewers} />
+                <GebetaSearch reviewers={props.reviewers} categories = {props.categories} />
                 <div className="flex flex-col items-center gap-4">
                     {reviews.map((review: Review, index: number) =>
                         index === reviews.length - 1 ? (
