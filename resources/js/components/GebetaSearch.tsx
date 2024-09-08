@@ -7,6 +7,7 @@ import {
     Check,
     X,
     CheckIcon,
+    LoaderCircle,
 } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
@@ -95,35 +96,38 @@ function RestaurantSearch() {
 
 function Address() {
     const searchParams = useSearchParams();
+
     const [location, setLocation] = useState(
         searchParams.get("location") || ""
     );
+    const [address, setAddress] = useState(searchParams.get("address") || "");
 
-    const [loading, setLoading] = useState(false);
+    const [isLoading, setIsLoading] = useState(false);
     const [error, setError] = useState<string | null>(null);
 
     function clear() {
+        setAddress("");
         setLocation("");
     }
 
     const updateURL = useCallback(
         (name: string, value: string) => {
             if (value) {
-                searchParams.set("location", value);
+                searchParams.set(name, value);
             } else {
-                searchParams.delete("location");
+                searchParams.delete(name);
             }
         },
         [searchParams]
     );
 
     const handleGetLocation = () => {
-        setLoading(true);
+        setIsLoading(true);
         setError(null);
 
         if (!navigator.geolocation) {
             setError("Geolocation is not supported by your browser");
-            setLoading(false);
+            setIsLoading(false);
             return;
         }
 
@@ -131,42 +135,50 @@ function Address() {
             async (position) => {
                 try {
                     const { latitude, longitude } = position.coords;
-                    // const response = await fetch(
-                    //     `https://nominatim.openstreetmap.org/reverse?format=json&lat=${latitude}&lon=${longitude}`
-                    // );
-                    // const data = await response.json();
+                    const response = await fetch(
+                        `https://nominatim.openstreetmap.org/reverse?format=json&lat=${latitude}&lon=${longitude}`
+                    );
+                    const data = await response.json();
 
-                    // if (data.display_name) {
-                    //     setLocation(data.display_name);
-                    // } else {
-                    //     setError("Unable to retrieve address");
-                    // }
-                    setLocation(`${latitude},${longitude}`)
+                    if (data.display_name) {
+                        setLocation(`${latitude},${longitude}`);
+                        setAddress(data.display_name);
+                    } else {
+                        setError("Unable to retrieve address");
+                    }
                 } catch (error) {
                     setError("Error fetching location data");
                 } finally {
-                    setLoading(false);
+                    setIsLoading(false);
                 }
             },
             (error) => {
                 setError(`Unable to retrieve your location: ${error.message}`);
-                setLoading(false);
+                setIsLoading(false);
             }
         );
     };
 
     useEffect(() => {
-        updateURL("location", location);
-    }, [location, updateURL]);
+        if (location || location == "") {
+            updateURL("location", location);
+        }
+        if (address || address == "") {
+            if (address == "") {
+                updateURL("location", "");
+            }
+            updateURL("address", address);
+        }
+    }, [location, address, updateURL]);
 
     return (
         <div className="relative">
             <Input
                 type="text"
-                value={location}
+                value={address}
                 placeholder="Figa, road to summit fird bet. In front of kaldis coffee"
-                onChange={(e) => setLocation(e.target.value)}
-                className="pl-14 text-lg text-black bg-white  border-none focus-visible:ring-0 focus-visible:ring-offset-0 focus-visible:border-primary"
+                onChange={(e) => setAddress(e.target.value)}
+                className="pl-20 text-lg text-black bg-white  border-none focus-visible:ring-0 focus-visible:ring-offset-0 focus-visible:border-primary"
             />
             <Button
                 variant="outline"
@@ -174,9 +186,14 @@ function Address() {
                 className="absolute left-1 top-1/2 -translate-y-1/2 bg-white border-none hover:bg-[#c44015] p-1 rounded-full"
                 onClick={handleGetLocation}
             >
-                <MapPin className="h-6 w-6" />
+                {isLoading ? (
+                    <LoaderCircle className="h-6 w-6 animate-spin" />
+                ) : (
+                    <MapPin className="h-6 w-6" />
+                )}
             </Button>
-            {location ? (
+
+            {location || address ? (
                 <Button
                     variant="ghost"
                     size={null}
@@ -194,17 +211,6 @@ function Address() {
 
 function Reviewer({ reviewer }) {
     return (
-        // <div className="w-full flex gap-2 items-center px-2">
-        // <Avatar className="border-2 border-[#ff3b5c]">
-        //     <AvatarImage
-        //         src="https://p16-sign-va.tiktokcdn.com/tos-maliva-avt-0068/dd5ec6adf36e6b504ecf0f0989e24c26~c5_1080x1080.jpeg?lk3s=a5d48078&nonce=22065&refresh_token=34caa5b9f42d94f71b1ba957db90bfa9&x-expires=1724547600&x-signature=KO9RQK47fHaDiXZhm6dIvUDzEjw%3D&shp=a5d48078&shcp=81f88b70"
-        //         alt="@shadcn"
-        //     />
-        //     <AvatarFallback className="bg-white">SG</AvatarFallback>
-        // </Avatar>
-        // <div className="font-bold"> {reviewer.name}</div>
-        // {/* </div> */}
-
         <span className="flex space-x-2 items-center p-[3px]">
             <Avatar className="border-2 border-[#ff3b5c]">
                 <AvatarImage
@@ -333,7 +339,9 @@ function ReviewerFilter({ reviewers }) {
                                                     </Button>
                                                     {index <
                                                         reviewers.length -
-                                                            1 && <Separator className="bg-[#f4f3f3]" />}
+                                                            1 && (
+                                                        <Separator className="bg-[#f4f3f3]" />
+                                                    )}
                                                 </li>
                                             )
                                         )
@@ -449,16 +457,20 @@ function GebetaSearch({ reviewers, categories }) {
     console.log("render");
 
     function search() {
-        const restaurant_name = searchParams.get("restaurant") || null;
+        // const restaurant_name = searchParams.get("restaurant") || null;
         const reviewers = searchParams.get("reviewers") || null;
         const location = searchParams.get("location") || null;
+        const address = searchParams.get("address") || null;
         const categories = searchParams.get("categories") || null;
+
         let data = {};
-        if (restaurant_name !== null) data.restaurant = restaurant_name;
+        // if (restaurant_name !== null) data.restaurant = restaurant_name;
         if (reviewers !== null) data.reviewers = reviewers.replace(/\s+/g, "");
         if (location !== null) data.location = location;
+        if (address != null) data.address = address;
         if (categories !== null)
             data.categories = categories.replace(/\s+/g, "");
+
         router.visit("/", {
             method: "get",
             data: data,

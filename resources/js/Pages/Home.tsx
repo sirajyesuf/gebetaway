@@ -95,7 +95,7 @@ export default function Home(props) {
                 className="md:container h-auto  flex flex-col gap-4  text-black p-1 "
             >
                 <div className="capitalize text-2xl font-bold">Discover</div>
-                <CategoryFilter categories={props.categories}/>
+                <CategoryFilter categories={props.categories} />
 
                 <GebetaSearch
                     reviewers={props.reviewers}
@@ -111,12 +111,14 @@ export default function Home(props) {
                                 key={review.id}
                             >
                                 <div>
-                                    {review.restaurant_name} = {review.id} = {review.distance} km
+                                    {review.restaurant_name} = {review.id} ={" "}
+                                    {review.distance} km
                                 </div>
 
                                 <TikTokEmbed
                                     url={review.tiktok_video_url}
                                     width={325}
+                                    placeholderDisabled={true}
                                 />
                             </div>
                         ))
