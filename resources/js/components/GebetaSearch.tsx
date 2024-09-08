@@ -131,16 +131,17 @@ function Address() {
             async (position) => {
                 try {
                     const { latitude, longitude } = position.coords;
-                    const response = await fetch(
-                        `https://nominatim.openstreetmap.org/reverse?format=json&lat=${latitude}&lon=${longitude}`
-                    );
-                    const data = await response.json();
+                    // const response = await fetch(
+                    //     `https://nominatim.openstreetmap.org/reverse?format=json&lat=${latitude}&lon=${longitude}`
+                    // );
+                    // const data = await response.json();
 
-                    if (data.display_name) {
-                        setLocation(data.display_name);
-                    } else {
-                        setError("Unable to retrieve address");
-                    }
+                    // if (data.display_name) {
+                    //     setLocation(data.display_name);
+                    // } else {
+                    //     setError("Unable to retrieve address");
+                    // }
+                    setLocation(`${latitude},${longitude}`)
                 } catch (error) {
                     setError("Error fetching location data");
                 } finally {

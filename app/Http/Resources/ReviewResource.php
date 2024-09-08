@@ -36,7 +36,9 @@ class ReviewResource extends JsonResource
             'reviewer_tiktok_handler' => $this->reviewer_tiktok_handler,
             'tiktok_video_url' => $this->tiktok_video_url,
             'videoID' => $this->extractLastNumberFromUrl($this->tiktok_video_url),
-            'tiktok_video_embed' => $this->tiktok_video_embed
+            'tiktok_video_embed' => $this->tiktok_video_embed,
+            'distance' => $this->distance,
+            'categories' => $this->categories
         ];
 
     }

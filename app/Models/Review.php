@@ -12,6 +12,7 @@ class Review extends Model
     use SoftDeletes;
 
     protected $casts  = [
-        'json' => 'array'
+        'restaurant_location' => 'array',
+        'categories' => 'array'
     ];
 }

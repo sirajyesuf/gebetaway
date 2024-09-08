@@ -16,7 +16,7 @@ return new class extends Migration
             //restaurant
             $table->string('restaurant_name');
             $table->string('restaurant_address');
-            $table->string('restaurant_location')->nullable();
+            $table->json('restaurant_location');
 
             //reviewer and video
             $table->string('reviewer_name');

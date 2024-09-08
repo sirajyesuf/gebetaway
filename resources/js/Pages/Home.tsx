@@ -10,11 +10,13 @@ import { MapPin } from "lucide-react";
 import { router } from "@inertiajs/react";
 import useSearchParams from "@/hooks/useUrlSearchParams";
 import { Input } from "@/components/ui/input";
-
+import Video404 from "@/components/Video404";
+import Footer from "@/components/Footer";
+import CategoryFilter from "@/components/CategoryFilter";
 export default function Home(props) {
     const searchParams = useSearchParams();
 
-    console.log(props.reviews);
+    console.log(props.reviews.data);
     const [reviews, setReviews] = useState(props.reviews.data);
     const [nextPageUrl, setNextPageUrl] = useState(props.reviews.links.next);
     const [page, setPage] = useState(1);
@@ -90,14 +92,36 @@ export default function Home(props) {
 
             <main
                 id="main"
-                className="md:container h-auto  flex flex-col gap-4  text-black border-4 p-1 "
+                className="md:container h-auto  flex flex-col gap-4  text-black p-1 "
             >
-                <div className="capitalize text-2xl font-bold">
-                    Discover
-                </div>
-                <GebetaSearch reviewers={props.reviewers} categories = {props.categories} />
+                <div className="capitalize text-2xl font-bold">Discover</div>
+                <CategoryFilter categories={props.categories}/>
+
+                <GebetaSearch
+                    reviewers={props.reviewers}
+                    categories={props.categories}
+                />
                 <div className="flex flex-col items-center gap-4">
-                    {reviews.map((review: Review, index: number) =>
+                    {reviews.length === 0 ? (
+                        <Video404 />
+                    ) : (
+                        reviews.map((review: Review, index: number) => (
+                            <div
+                                className="flex flex-col justify-center  items-center  gap-2 border-2 border-red-900 w-[400px] p-4"
+                                key={review.id}
+                            >
+                                <div>
+                                    {review.restaurant_name} = {review.id} = {review.distance} km
+                                </div>
+
+                                <TikTokEmbed
+                                    url={review.tiktok_video_url}
+                                    width={325}
+                                />
+                            </div>
+                        ))
+                    )}
+                    {/* {reviews.map((review: Review, index: number) =>
                         index === reviews.length - 1 ? (
                             <div
                                 className="flex flex-col justify-center  items-center  gap-2"
@@ -122,22 +146,16 @@ export default function Home(props) {
                                     {review.restaurant_name} = {review.id}
                                 </div>
 
-                                {/* <div className="shadow-2 border-none bg-red-400 rounded-md px-4 flex items-center">
-                                    {review.restaurant_address}
-                                    <Button>
-                                        <MapPin></MapPin>
-                                    </Button>
-                                </div> */}
-
                                 <TikTokEmbed
                                     url={review.tiktok_video_url}
                                     width={325}
                                 />
                             </div>
                         )
-                    )}
+                    )} */}
                 </div>
             </main>
+            <Footer></Footer>
         </>
     );
 }

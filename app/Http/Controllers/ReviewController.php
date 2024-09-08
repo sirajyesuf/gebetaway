@@ -7,27 +7,21 @@ use Inertia\Inertia;
 use App\Models\Reviewer;
 use App\Models\Review;
 use App\Http\Resources\ReviewResource;
+use App\Models\Category;
+use Illuminate\Pagination\LengthAwarePaginator;
 
 class ReviewController extends Controller
 {
     public function index(Request $request) {
 
-    $allCategories = Review::distinct('categories')->pluck('categories')->toArray();
-    $uniqueCategories = collect($allCategories)
-    ->flatMap(function ($item) {
-    return json_decode($item, true); // Decode JSON for each row
-    })
-    ->unique() // Get only unique values
-    ->values() // Reset the array keys
-    ->toArray();
-
     $restaurant_name = $request->restaurant;
     $selected_reviewers  = $request->input('reviewers');
     $location = $request->input('location');
     $categories = $request->input('categories');
-    
-    // dump($selected_reviewers);
 
+    $userLatitude = 9.008295047747442;  // User's Latitude
+    $userLongitude = 38.69530080556199; // User's Longitude
+    $radius = 6371; // Earth's radius in kilometers
 
     $reviews = Review::query()
     ->when($restaurant_name, function ($query, $restaurant_name) {
@@ -42,13 +36,38 @@ class ReviewController extends Controller
     ->when($categories, function ($query, $categories) {
         return $query->whereRaw('LOWER(categories) like ?', ['%' . strtolower($categories) . '%']);
     })
-    ->paginate(5);
+    ->get();
+
+    // Calculate distance and append it
+    $reviews = $reviews->map(function ($review) use ($userLatitude, $userLongitude) {
+        $lat = $review->restaurant_location[0];
+        $lon = $review->restaurant_location[1];
+        $distance = $this->calculateDistance($userLatitude, $userLongitude, $lat, $lon);
+        $review->distance = $distance;
+        return $review;
+    });
+
+    // Sort the reviews by distance
+    $sortedReviews = $reviews->sortBy('distance');
+
+    // // Paginate the sorted results
+    $currentPage = LengthAwarePaginator::resolveCurrentPage();
+    $perPage = 10;
+    $paginatedReviews = new LengthAwarePaginator(
+        $sortedReviews->forPage($currentPage, $perPage),
+        $sortedReviews->count(),
+        $perPage,
+        $currentPage,
+        ['path' => LengthAwarePaginator::resolveCurrentPath()]
+    );
+    
+    
 
 
     return Inertia::render('Home', [
         'reviewers' => Reviewer::get()->toArray(),
-        'categories' => $uniqueCategories,
-        'reviews' => ReviewResource::collection($reviews),
+        'categories' => Category::get()->toArray(),
+        'reviews' => ReviewResource::collection($paginatedReviews),
     ]);
 
     }
@@ -58,6 +77,21 @@ class ReviewController extends Controller
 
 
 
+    private function calculateDistance($lat1, $lon1, $lat2, $lon2)
+    {
+        $earthRadius = 6371; // Earth radius in kilometers
+    
+        $dLat = deg2rad($lat2 - $lat1);
+        $dLon = deg2rad($lon2 - $lon1);
+    
+        $a = sin($dLat / 2) * sin($dLat / 2) +
+             cos(deg2rad($lat1)) * cos(deg2rad($lat2)) *
+             sin($dLon / 2) * sin($dLon / 2);
+    
+        $c = 2 * atan2(sqrt($a), sqrt(1 - $a));
+    
+        return $earthRadius * $c; // Distance in kilometers
+    }
 
 
 

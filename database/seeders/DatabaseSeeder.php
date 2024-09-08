@@ -2,6 +2,7 @@
 
 namespace Database\Seeders;
 
+use App\Models\Category;
 use App\Models\Reviewer;
 use App\Models\Review;
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
@@ -15,7 +16,8 @@ class DatabaseSeeder extends Seeder
     public function run(): void
     {
         // Reviewer::factory(10)->create();
-        Review::factory(10)->create(); 
+        Review::factory(10)->create();
+        // Category::factory(10)->create();
 
     }
 }
