@@ -40,8 +40,8 @@ class ReviewController extends Controller
 
     // Calculate distance and append it
     $reviews = $reviews->map(function ($review) use ($userLatitude, $userLongitude) {
-        $lat = (int) $review->restaurant_location[0];
-        $lon = (int) $review->restaurant_location[1];
+        $lat = (float) $review->restaurant_location[0];
+        $lon =  (float)$review->restaurant_location[1];
         $distance = $this->calculateDistance($userLatitude, $userLongitude, $lat, $lon);
         $review->distance = $distance;
         return $review;
