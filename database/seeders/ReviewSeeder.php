@@ -65,8 +65,26 @@ class ReviewSeeder extends Seeder
                 'restaurant_location' => json_encode([8.988784493724514, 38.785250752436355]), // Encode as JSON array
                 'reviewer_name' => 'shegre gebeta',
                 'reviewer_tiktok_handler' => 'shegergebeta00',
-                'tiktok_video_url' => 'https://www.tiktok.com/@shegergebeta/video/7182555295481089286',
+                'tiktok_video_url' => 'htttps://www.tiktok.com/@shegergebeta/video/7182555295481089286',
                 'categories' => json_encode(['coffee','injera']) // Encode array as JSON
+            ],
+            [
+                'restaurant_name' => 'ሥሙር ስጋ ቤት simur',
+                'restaurant_address' => 'signal rear freshcorder  ሲግናል ፍሬሽ ኮርነር አጠገብ',
+                'restaurant_location' => json_encode([9.023109197376588,38.781566374579405 ]),
+                'reviewer_name' => 'rawmeatlovers',
+                'reviewer_tiktok_handler' => 'rawmeatlovers',
+                'tiktok_video_url' => 'https://www.tiktok.com/@rawmeatlovers/video/7396558747696516357',
+                'categories' => json_encode(['kitfo','raw meat']) // Encode array as JSON
+            ],
+            [
+                'restaurant_name' => 'Classy cafe and restaurant',
+                'restaurant_address' => 'Star City Mall | Jomo Michael | እስታር ሲቲ ሞል | ጀሞ ሚካኤል 2nd floor',
+                'restaurant_location' => json_encode([8.9693989897289, 38.72168537995218]),
+                'reviewer_name' => 'sami_review_',
+                'reviewer_tiktok_handler' => 'sami_review_',
+                'tiktok_video_url' => 'https://www.tiktok.com/@sami_review_/video/7395870793307098374',
+                'categories' => json_encode(['noodles','pizza','burger','dizzert']) // Encode array as JSON
             ]
         ];
         

@@ -14,38 +14,50 @@ class ReviewController extends Controller
 {
     public function index(Request $request) {
 
-    $restaurant_name = $request->restaurant;
     $selected_reviewers  = $request->input('reviewers');
-    $location = $request->input('location');
+    $location = $request->input('location') ?  array_map('floatval', explode(',',$request->input('location')))  : null;   
+    // dump($location);
+    $address = $request->input('address');
     $categories = $request->input('categories');
 
-    $userLatitude = 9.008295047747442;  // User's Latitude
-    $userLongitude = 38.69530080556199; // User's Longitude
+    // 9.006039213440332, 38.695003761355785 bicha fok
+    // $userLatitude = 9.006039213440332;  // User's Latitude
+    // $userLongitude = 38.695003761355785; // User's Longitude
+
+
+
+
     $radius = 6371; // Earth's radius in kilometers
 
     $reviews = Review::query()
-    ->when($restaurant_name, function ($query, $restaurant_name) {
-        return $query->whereRaw('LOWER(restaurant_name) like ?', ['%' . strtolower($restaurant_name) . '%']);
-    })
-    ->when($selected_reviewers, function ($query, $selected_reviewers) {
-        return $query->whereIn('reviewer_tiktok_handler', explode(',', $selected_reviewers) );
-    })
-    ->when($location, function ($query, $location) {
-        return $query->whereRaw('LOWER(restaurant_address) like ?', ['%' . strtolower($location) . '%']);
+    ->when($address, function ($query, $address) {
+        return $query->whereRaw('LOWER(restaurant_address) like ?', ['%' . strtolower($address) . '%']);
     })
     ->when($categories, function ($query, $categories) {
         return $query->whereRaw('LOWER(categories) like ?', ['%' . strtolower($categories) . '%']);
     })
+    ->when($selected_reviewers, function ($query, $selected_reviewers) {
+        return $query->whereIn('reviewer_tiktok_handler', explode(',', $selected_reviewers) );
+    })
     ->get();
 
-    // Calculate distance and append it
-    $reviews = $reviews->map(function ($review) use ($userLatitude, $userLongitude) {
+
+    if($location !== null){
+
+        $userLatitude = $location[0];
+        $userLongitude = $location[1];
+
+        // Calculate distance and append it
+        $reviews = $reviews->map(function ($review) use ($userLatitude, $userLongitude) {
         $lat = (float) $review->restaurant_location[0];
         $lon =  (float)$review->restaurant_location[1];
         $distance = $this->calculateDistance($userLatitude, $userLongitude, $lat, $lon);
-        $review->distance = $distance;
+        $review->distance = round($distance,2);
         return $review;
-    });
+        });
+    }
+
+
 
     // Sort the reviews by distance
     $sortedReviews = $reviews->sortBy('distance');

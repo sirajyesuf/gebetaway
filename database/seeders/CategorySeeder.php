@@ -3,16 +3,39 @@
 namespace Database\Seeders;
 
 use Illuminate\Database\Seeder;
-use App\Models\Category;
+use Illuminate\Support\Facades\DB;
 
 class CategorySeeder extends Seeder
 {
-    /**
-     * Run the database seeds.
-     */
+    
     public function run(): void
     {
-        Category::factory(10)->create();
+        $categories = [
+            [
+                'name' => 'pizza'
+            ],
+            [
+                'name' => 'burger'
+            ],
+            [
+                'name' => 'raw meat'
+            ],
+            [
+                'name' => 'injera'
+            ],
+            [
+                'name' => 'dessert'
+            ],
+            [
+                'name' => 'pastry'
+            ],
+            [
+                'name' => 'kitfo'
+            ]
+        ];
+
+        DB::table('categories')->truncate();
+        DB::table('categories')->insert($categories);
 
     }
 }

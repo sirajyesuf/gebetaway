@@ -6,13 +6,20 @@ import Review from "@/types/review";
 import Reviewer from "@/types/reviewer";
 import { TikTokEmbed } from "react-social-media-embed";
 import { Button } from "@/components/ui/button";
-import { MapPin } from "lucide-react";
+import { MapPin, Compass, Map } from "lucide-react";
 import { router } from "@inertiajs/react";
 import useSearchParams from "@/hooks/useUrlSearchParams";
 import { Input } from "@/components/ui/input";
 import Video404 from "@/components/Video404";
 import Footer from "@/components/Footer";
 import CategoryFilter from "@/components/CategoryFilter";
+import {
+    Tooltip,
+    TooltipContent,
+    TooltipProvider,
+    TooltipTrigger,
+} from "@/components/ui/tooltip";
+
 export default function Home(props) {
     const searchParams = useSearchParams();
 
@@ -107,18 +114,27 @@ export default function Home(props) {
                     ) : (
                         reviews.map((review: Review, index: number) => (
                             <div
-                                className="flex flex-col justify-center  items-center  gap-2 border-2 border-red-900 w-[400px] p-4"
+                                className="flex flex-col justify-center  items-center  gap-2  w-[400px] p-4"
                                 key={review.id}
                             >
-                                <div>
-                                    {review.restaurant_name} = {review.id} ={" "}
-                                    {review.distance} km
+                                <div className="bg-[#fe2c55] text-white rounded-md w-[88%] h-auto flex justify-between items-center px-2">
+                                    <p className="capitalize">
+                                        {review.restaurant_name}
+                                    </p>
+                                    <Button variant="link">
+                                        <a
+                                            href={`https://www.google.com/maps?q=${review.restaurant_location[0]},${review.restaurant_location[1]}`}
+                                            target="_blank"
+                                            rel="noopener noreferrer"
+                                        >
+                                            <Map />
+                                        </a>
+                                    </Button>
                                 </div>
 
                                 <TikTokEmbed
                                     url={review.tiktok_video_url}
                                     width={325}
-                                    placeholderDisabled={true}
                                 />
                             </div>
                         ))

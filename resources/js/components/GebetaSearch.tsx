@@ -468,8 +468,8 @@ function GebetaSearch({ reviewers, categories }) {
         if (reviewers !== null) data.reviewers = reviewers.replace(/\s+/g, "");
         if (location !== null) data.location = location;
         if (address != null) data.address = address;
-        if (categories !== null)
-            data.categories = categories.replace(/\s+/g, "");
+        if (categories !== null) data.categories = categories;
+        // replace(/\s+/g, "");
 
         router.visit("/", {
             method: "get",
