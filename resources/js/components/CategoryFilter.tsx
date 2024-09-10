@@ -91,9 +91,6 @@ export default function CategoryFilter({ categories }) {
                     </Button>
                 ))}
             </div>
-            {/* <Button onClick={applyFilter} className="mt-2 text-xs py-1 h-auto rounded-full w-full">
-        Apply Filter
-      </Button> */}
         </div>
     );
 }

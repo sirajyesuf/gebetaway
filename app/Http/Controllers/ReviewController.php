@@ -19,8 +19,6 @@ class ReviewController extends Controller
     $address = $request->input('address');
     $categories = $request->input('categories');
 
-    // dump($location);
-    // dump($address);
 
     $reviews = Review::query()
     ->when($address and $location === null, function ($query, $address) {
@@ -74,7 +72,7 @@ class ReviewController extends Controller
 
 
     return Inertia::render('Home', [
-        'reviewers' => Reviewer::get()->toArray(),
+        'reviewers' => Review::distinct()->pluck('reviewer_tiktok_handler'),
         'categories' => Category::get()->toArray(),
         'reviews' => ReviewResource::collection($paginatedReviews),
     ]);

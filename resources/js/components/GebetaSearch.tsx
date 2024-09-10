@@ -219,7 +219,7 @@ function Reviewer({ reviewer }) {
                 />
                 <AvatarFallback className="bg-white">SG</AvatarFallback>
             </Avatar>
-            <span>{reviewer.name.toUpperCase()}</span>
+            <span>{reviewer.toUpperCase()}</span>
         </span>
     );
 }
@@ -235,7 +235,7 @@ function ReviewerFilter({ reviewers }) {
     });
 
     const filteredReviewer = reviewers.filter((rev: any) =>
-        rev.name.toLowerCase().includes(searchquery.toLowerCase())
+        rev.toLowerCase().includes(searchquery.toLowerCase())
     );
 
     const updateURL = useCallback(
@@ -325,16 +325,15 @@ function ReviewerFilter({ reviewers }) {
                                                         className="rounded-none w-[100%] h-[20] flex items-center text-left justify-between px-4 hover:bg-[#f7f7f3] hover:text-black"
                                                         onClick={() =>
                                                             handleSelect(
-                                                                reviewer.tiktok_handler
+                                                                reviewer
                                                             )
                                                         }
                                                     >
-                                                        {/* {reviewer.tiktok_handler} */}
                                                         <Reviewer
                                                             reviewer={reviewer}
                                                         ></Reviewer>
                                                         {selectedReviewers.includes(
-                                                            reviewer.tiktok_handler
+                                                            reviewer
                                                         ) && <CheckIcon />}
                                                     </Button>
                                                     {index <

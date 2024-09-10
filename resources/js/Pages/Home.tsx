@@ -22,8 +22,7 @@ import {
 
 export default function Home(props) {
     const searchParams = useSearchParams();
-
-    console.log(props.reviews.data);
+    console.log(props);
     const [reviews, setReviews] = useState(props.reviews.data);
     const [nextPageUrl, setNextPageUrl] = useState(props.reviews.links.next);
     const [page, setPage] = useState(1);
