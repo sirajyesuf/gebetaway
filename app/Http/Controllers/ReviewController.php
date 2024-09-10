@@ -16,21 +16,14 @@ class ReviewController extends Controller
 
     $selected_reviewers  = $request->input('reviewers');
     $location = $request->input('location') ?  array_map('floatval', explode(',',$request->input('location')))  : null;   
-    // dump($location);
     $address = $request->input('address');
     $categories = $request->input('categories');
 
-    // 9.006039213440332, 38.695003761355785 bicha fok
-    // $userLatitude = 9.006039213440332;  // User's Latitude
-    // $userLongitude = 38.695003761355785; // User's Longitude
-
-
-
-
-    $radius = 6371; // Earth's radius in kilometers
+    // dump($location);
+    // dump($address);
 
     $reviews = Review::query()
-    ->when($address, function ($query, $address) {
+    ->when($address and $location === null, function ($query, $address) {
         return $query->whereRaw('LOWER(restaurant_address) like ?', ['%' . strtolower($address) . '%']);
     })
     ->when($categories, function ($query, $categories) {
@@ -47,22 +40,26 @@ class ReviewController extends Controller
         $userLatitude = $location[0];
         $userLongitude = $location[1];
 
-        // Calculate distance and append it
+        // calculate distance and append it
         $reviews = $reviews->map(function ($review) use ($userLatitude, $userLongitude) {
         $lat = (float) $review->restaurant_location[0];
         $lon =  (float)$review->restaurant_location[1];
         $distance = $this->calculateDistance($userLatitude, $userLongitude, $lat, $lon);
         $review->distance = round($distance,2);
+
+
         return $review;
+
+
         });
     }
 
 
 
-    // Sort the reviews by distance
+    // sort the reviews by distance
     $sortedReviews = $reviews->sortBy('distance');
 
-    // // Paginate the sorted results
+    // // paginate the sorted results
     $currentPage = LengthAwarePaginator::resolveCurrentPage();
     $perPage = 10;
     $paginatedReviews = new LengthAwarePaginator(
@@ -91,7 +88,8 @@ class ReviewController extends Controller
 
     private function calculateDistance($lat1, $lon1, $lat2, $lon2)
     {
-        $earthRadius = 6371; // Earth radius in kilometers
+        // Earth radius in kilometers
+        $earthRadius = 6371;
     
         $dLat = deg2rad($lat2 - $lat1);
         $dLon = deg2rad($lon2 - $lon1);

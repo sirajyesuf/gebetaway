@@ -120,6 +120,7 @@ export default function Home(props) {
                                 <div className="bg-[#fe2c55] text-white rounded-md w-[88%] h-auto flex justify-between items-center px-2">
                                     <p className="capitalize">
                                         {review.restaurant_name}
+                                        {review.distance} km
                                     </p>
                                     <Button variant="link">
                                         <a
@@ -135,42 +136,11 @@ export default function Home(props) {
                                 <TikTokEmbed
                                     url={review.tiktok_video_url}
                                     width={325}
+                                    placeholderImageUrl={review.thumbnail_url}
                                 />
                             </div>
                         ))
                     )}
-                    {/* {reviews.map((review: Review, index: number) =>
-                        index === reviews.length - 1 ? (
-                            <div
-                                className="flex flex-col justify-center  items-center  gap-2"
-                                ref={lastBookElementRef}
-                                key={review.id}
-                            >
-                                <div className="border-2 border-red-500">
-                                    {review.restaurant_name} = {review.id}
-                                </div>
-
-                                <TikTokEmbed
-                                    url={review.tiktok_video_url}
-                                    width={325}
-                                />
-                            </div>
-                        ) : (
-                            <div
-                                className="flex flex-col justify-center  items-center  gap-2 border-2 border-red-900 w-[400px] p-4"
-                                key={review.id}
-                            >
-                                <div>
-                                    {review.restaurant_name} = {review.id}
-                                </div>
-
-                                <TikTokEmbed
-                                    url={review.tiktok_video_url}
-                                    width={325}
-                                />
-                            </div>
-                        )
-                    )} */}
                 </div>
             </main>
             <Footer></Footer>

@@ -454,22 +454,28 @@ function Categories(props) {
 
 function GebetaSearch({ reviewers, categories }) {
     const searchParams = useSearchParams();
-    console.log("render");
+
+    const handleClick = () => {
+        search();
+    };
+
+    const handleKeyDown = (event) => {
+        if (event.key === "Enter") {
+            search();
+        }
+    };
 
     function search() {
-        // const restaurant_name = searchParams.get("restaurant") || null;
         const reviewers = searchParams.get("reviewers") || null;
         const location = searchParams.get("location") || null;
         const address = searchParams.get("address") || null;
         const categories = searchParams.get("categories") || null;
 
         let data = {};
-        // if (restaurant_name !== null) data.restaurant = restaurant_name;
         if (reviewers !== null) data.reviewers = reviewers.replace(/\s+/g, "");
         if (location !== null) data.location = location;
         if (address != null) data.address = address;
         if (categories !== null) data.categories = categories;
-        // replace(/\s+/g, "");
 
         router.visit("/", {
             method: "get",
@@ -502,23 +508,20 @@ function GebetaSearch({ reviewers, categories }) {
     return (
         <>
             <div className="flex flex-col justify-center  border-none p-1">
-                {/* <div className="w-[90%] md:w-[90%] flex flex-row md:flex-row gap-4 justify-evenly  p-1 items-center"> */}
                 <div className="w-full border-2 border-[#ca3b19] px-2  rounded-full  flex justify-between  items-center gap-2 py-[2px]">
-                    <div className="w-[90%]">
+                    <div
+                        className="w-[90%]"
+                        onKeyDown={(e) => handleKeyDown(e)}
+                    >
                         <Address></Address>
                     </div>
                     <Button
                         className="bg-[#ca3b19] border-2 border-none rounded-full text-[rgb(249,245,245)] text-md hover:bg-black hidden md:block"
-                        onClick={() => search()}
+                        onClick={() => handleClick()}
                     >
                         Search
                     </Button>
                 </div>
-
-                <div className="self-start">
-                    {/* <Categories categories={categories}  /> */}
-                </div>
-                {/* </div> */}
                 <div className="w-[90%] flex flex-wrap gap-2 p-2">
                     <ReviewerFilter reviewers={reviewers} />
                 </div>

@@ -5,8 +5,8 @@ type Review = {
     restaurant_location: string;
     reviewer_tiktok_handler: string;
     tiktok_video_url: string;
-    videoID: number;
-    tiktok_video_embed: string;
+    thumbnail_url:string,
+    distance:string
 };
 
 export default Review;

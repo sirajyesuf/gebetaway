@@ -1,4 +1,4 @@
-import { useState, useEffect,useCallback } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { Button } from "@/components/ui/button";
 import { X } from "lucide-react";
 import useSearchParams from "@/hooks/useUrlSearchParams";
@@ -49,31 +49,39 @@ export default function CategoryFilter({ categories }) {
     };
 
     return (
-        <div className="p-2 space-y-2 flex md:flex-row flex-col gap-2  md:items-center">
-            <h2 className="text-lg font-bold">Categories</h2>
+        <div className="p-2 flex md:flex-row flex-col gap-2 md:items-center">
+            <h2 className="text-lg font-bold capitalize">category</h2>
             <div className="flex flex-wrap gap-2">
-                {categories.map((category:Category) => (
+                {categories.map((category: Category) => (
                     <Button
                         key={category.id}
-                        variant={selectedCategories.includes(category.name) ? "default" : "outline"}
+                        variant={
+                            selectedCategories.includes(category.name)
+                                ? "default"
+                                : "outline"
+                        }
                         onClick={() => toggleCategory(category.name)}
                         className={`
              bg-white
              text-black
               rounded-full 
-              text-xs
-              py-1
+              text-sm
+              py-0
               h-auto
               transition-all 
               duration-200 
               capitalize
-              ${selectedCategories.includes(category.name) ? "pr-1 pl-2" : "px-2"}
+              ${
+                  selectedCategories.includes(category.name)
+                      ? "pr-1 pl-2 border-2 border-[#c63f16]"
+                      : "px-4"
+              }
             `}
                     >
                         {category.name}
                         {selectedCategories.includes(category.name) && (
                             <X
-                                className="ml-1 h-3 w-3 shrink-0 opacity-50 hover:opacity-100"
+                                className="ml-1 h-4 w-4 shrink-0 opacity-50 hover:opacity-100"
                                 onClick={(e) => {
                                     e.stopPropagation();
                                     toggleCategory(category.name);

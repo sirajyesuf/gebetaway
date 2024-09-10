@@ -4,6 +4,7 @@ namespace App\Filament\Resources;
 
 use App\Filament\Resources\ReviewResource\Pages;
 use App\Filament\Resources\ReviewResource\RelationManagers;
+use App\Models\Category;
 use App\Models\Review;
 use Filament\Forms;
 use Filament\Forms\Form;
@@ -102,12 +103,7 @@ class ReviewResource extends Resource
                         Forms\Components\Select::make('categories')
                         ->searchable()
                         ->multiple()
-                        ->options([
-                            'tailwind' => 'Tailwind CSS',
-                            'alpine' => 'Alpine.js',
-                            'laravel' => 'Laravel',
-                            'livewire' => 'Laravel Livewire',
-                        ])
+                        ->options(Category::pluck('name','name'))
                         ]),
                     ])
                     ->columnSpan(['lg' => 1]),
@@ -168,15 +164,21 @@ class ReviewResource extends Resource
         return $table
             ->columns([
                 Tables\Columns\TextColumn::make('restaurant_name')
-                ->label('Restaurant Name'),
-                Tables\Columns\TextColumn::make('restaurant_address'),
-                Tables\Columns\TextColumn::make('restaurant_location'),
-                Tables\Columns\TextColumn::make('reviewer_tiktok_handler'),
+                ->label('Restaurant Name')
+                ->toggleable(),
+                Tables\Columns\TextColumn::make('restaurant_address')
+                ->toggleable(),
+                Tables\Columns\TextColumn::make('restaurant_location')
+                ->toggleable(),
+                Tables\Columns\TextColumn::make('reviewer_tiktok_handler')
+                ->toggleable(),
                 Tables\Columns\TextColumn::make('tiktok_video_url')
                 ->badge()
                 ->url(fn (Review $record): string => ReviewResource::googleMap($record->restaurant_location))
-                ->openUrlInNewTab(),
+                ->openUrlInNewTab()
+                ->toggleable(),
                 Tables\Columns\TextColumn::make('thumbnail_url')
+                ->toggleable()
                 ->label('Thumbnail URL')
                 ->badge()
             ])

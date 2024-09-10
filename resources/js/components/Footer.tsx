@@ -5,8 +5,7 @@ export default function Footer() {
         <footer className="py-6 px-4 bg-gray-100 text-center">
             <div className="max-w-4xl mx-auto">
                 <p className="text-sm text-gray-600 mb-4">
-                    © {new Date().getFullYear()} Your Company. All rights
-                    reserved.
+                    © {new Date().getFullYear()} Gebetaway. All rights reserved.
                 </p>
                 <nav className="flex justify-center space-x-4">
                     <Link
