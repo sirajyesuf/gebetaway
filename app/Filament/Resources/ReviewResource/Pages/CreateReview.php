@@ -12,8 +12,8 @@ class CreateReview extends CreateRecord
 
     protected function mutateFormDataBeforeCreate(array $data): array
     {
-        $location = array_map('floatval',explode(',', $data['restaurant_location']));
-        $data['restaurant_location'] = $location;
+        // $location = array_map('floatval',explode(',', $data['restaurant_location']));
+        // $data['restaurant_location'] = $location;
         return $data;
     }
 

@@ -62,19 +62,20 @@ class ReviewResource extends Resource
                         Forms\Components\Section::make('Restaurant Location')
                             ->schema([
                             Forms\Components\TextInput::make('restaurant_location')
-                            ->label('Latitude, Longitude')
+                            ->label('Latitude & Longitude')
                             ->placeholder('Enter lat, lon (e.g., 12.34, 56.78)')
                             ->required()
-                            ->live()
+                            ->live(onBlur:true)
+                            ->afterStateUpdated(fn(Set $set, ?string $state) => ReviewResource::convertRestaurantLocationStringToArray($set, $state))
                             ->rules([
                                 fn (Get $get): Closure => function (string $attribute, $value, Closure $fail) use ($get) {
-                                    $parts = explode(',', $value);
+                                    $parts = $value;
             
                                     if (count($parts) !== 2) {
                                         return $fail('The :attribute must contain both latitude and longitude.');
                                     }
-                                    $lat = floatval(trim($parts[0]));
-                                    $lon = floatval(trim($parts[1]));
+                                    $lat = $parts[0];
+                                    $lon = $parts[1];
                 
                                     if ($lat < -90 || $lat > 90) {
                                         return $fail('Latitude must be between -90 and 90 degrees.');
@@ -110,6 +111,27 @@ class ReviewResource extends Resource
             ])
             ->columns(3);
     }
+
+    public static function convertRestaurantLocationStringToArray($set,$state){
+        $location = explode(',', $state);
+        if(ReviewResource::containsNonNumericElement($location) == false){
+            $set('restaurant_location',array_map('floatval',$location));
+        }else{
+            $set('restaurant_location',$location);
+        }
+
+    }
+
+    public static function containsNonNumericElement($array) {
+        // Use array_filter to get values that are not numeric
+        $nonNumericValues = array_filter($array, function($value) {
+            return !is_numeric(trim($value));
+        });
+        
+        // Check if there are any non-numeric values in the array
+        return !empty($nonNumericValues);
+    }
+    
 
     public static function fetchDataFromApi($set,$state)
     {
