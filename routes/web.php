@@ -30,3 +30,7 @@ Route::get('/reviews',function(Request $request){
 Route::get('/about',function(){
     return Inertia::render('About');
 });
+
+Route::get('/privacy',function(){
+    return Inertia::render('PrivacyPolicy');
+});

@@ -266,7 +266,7 @@ function ReviewerFilter({ reviewers }) {
     }
 
     return (
-        <div className="flex gap-2 flex-wrap justify-start items-center">
+        <div className="flex gap-1 flex-wrap justify-start items-center">
             {selectedReviewers.map((rev: string, index) => (
                 <Button
                     key={index}
