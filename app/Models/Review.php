@@ -11,6 +11,8 @@ class Review extends Model
     use HasFactory;
     use SoftDeletes;
 
+    protected $guarded = [];
+
     protected $casts  = [
         'restaurant_location' => 'array',
         'categories' => 'array'
