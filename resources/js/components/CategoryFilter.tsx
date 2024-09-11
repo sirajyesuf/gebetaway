@@ -2,6 +2,7 @@ import { useState, useEffect, useCallback } from "react";
 import { Button } from "@/components/ui/button";
 import { X } from "lucide-react";
 import useSearchParams from "@/hooks/useUrlSearchParams";
+import Search from "@/api.ts";
 
 interface Category {
     id: string;
@@ -9,11 +10,11 @@ interface Category {
 }
 
 export default function CategoryFilter({ categories }) {
-    console.log(categories);
     const searchParams = useSearchParams();
 
     const [selectedCategories, setSelectedCategories] = useState<string[]>(
         () => {
+            console.log("from categories use state");
             const categoriesParam = searchParams.get("categories");
             return categoriesParam
                 ? categoriesParam.split(",").filter(Boolean)
@@ -21,31 +22,38 @@ export default function CategoryFilter({ categories }) {
         }
     );
 
-    const updateURL = useCallback(
-        (value: string) => {
-            if (value) {
-                searchParams.set("categories", value);
-            } else {
-                searchParams.delete("categories");
-            }
-        },
-        [searchParams]
-    );
-
-    useEffect(() => {
-        if (selectedCategories.length > 0) {
-            updateURL(selectedCategories.join(","));
+    const updateURL = (value: string) => {
+        if (value) {
+            searchParams.set("categories", value);
         } else {
-            updateURL("");
+            searchParams.delete("categories");
         }
-    }, [selectedCategories, updateURL]);
+    };
+
+    // useEffect(() => {
+    //     if (selectedCategories.length > 0) {
+    //         updateURL(selectedCategories.join(","));
+    //     } else {
+    //         updateURL("");
+    //     }
+    // }, [selectedCategories]);
 
     const toggleCategory = (category_name: string) => {
-        setSelectedCategories((current) =>
-            current.includes(category_name)
+        setSelectedCategories((current) => {
+            const selectedCategories = current.includes(category_name)
                 ? current.filter((value) => value !== category_name)
-                : [...current, category_name]
-        );
+                : [...current, category_name];
+
+            if (selectedCategories.length > 0) {
+                updateURL(selectedCategories.join(","));
+            } else {
+                updateURL("");
+            }
+
+            Search();
+
+            return selectedCategories;
+        });
     };
 
     return (
