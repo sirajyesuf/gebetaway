@@ -202,7 +202,11 @@ class ReviewResource extends Resource
                 Tables\Columns\TextColumn::make('thumbnail_url')
                 ->toggleable()
                 ->label('Thumbnail URL')
+                ->badge(),
+                Tables\Columns\TextColumn::make('categories')
                 ->badge()
+                ->searchable()
+                ->toggleable(),
             ])
             ->filters([
                 Tables\Filters\TrashedFilter::make(),
