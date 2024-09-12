@@ -14,7 +14,6 @@ export default function CategoryFilter({ categories }) {
 
     const [selectedCategories, setSelectedCategories] = useState<string[]>(
         () => {
-            console.log("from categories use state");
             const categoriesParam = searchParams.get("categories");
             return categoriesParam
                 ? categoriesParam.split(",").filter(Boolean)
@@ -29,14 +28,6 @@ export default function CategoryFilter({ categories }) {
             searchParams.delete("categories");
         }
     };
-
-    // useEffect(() => {
-    //     if (selectedCategories.length > 0) {
-    //         updateURL(selectedCategories.join(","));
-    //     } else {
-    //         updateURL("");
-    //     }
-    // }, [selectedCategories]);
 
     const toggleCategory = (category_name: string) => {
         setSelectedCategories((current) => {

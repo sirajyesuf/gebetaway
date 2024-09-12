@@ -165,7 +165,8 @@ function Reviewer({ reviewer }) {
     );
 }
 
-function ReviewerFilter({ reviewers }) {
+function ReviewerFilter(props) {
+    const reviewers = props.reviewers.map((rev) => rev.replace(/\s+/g, ""));
     const searchParams = useSearchParams();
     const [open, setOpen] = useState(false);
 
@@ -191,17 +192,18 @@ function ReviewerFilter({ reviewers }) {
 
     function handleRemoveReviewer(tiktok_handler: string) {
         setSelectedReviewers((selectedReviewers) => {
-            const newSelectedReviewers = selectedReviewers.includes(
-                tiktok_handler
-            )
-                ? selectedReviewers.filter((rev) => rev !== tiktok_handler)
-                : [...selectedReviewers, tiktok_handler];
+            const newSelectedReviewers = selectedReviewers.filter(
+                (rev) => rev !== tiktok_handler
+            );
+
             if (newSelectedReviewers.length > 0) {
-                updateURL(selectedReviewers.join(", "));
+                updateURL(newSelectedReviewers.join(","));
             } else {
                 updateURL("");
             }
+
             Search();
+
             return newSelectedReviewers;
         });
     }
@@ -212,8 +214,10 @@ function ReviewerFilter({ reviewers }) {
             )
                 ? selectedReviewers.filter((rev) => rev !== tiktok_handler)
                 : [...selectedReviewers, tiktok_handler];
+
+
             if (newSelectedReviewers.length > 0) {
-                updateURL(newSelectedReviewers.join(", "));
+                updateURL(newSelectedReviewers.join(","));
             } else {
                 updateURL("");
             }
