@@ -10,7 +10,7 @@ function Video404() {
                 />
             </div>
 
-            <div className="text-2xl font-bold">Video currently unavailable</div>
+            <div className="text-2xl font-bold capitalize">restaurant not found</div>
         </div>
     );
 }

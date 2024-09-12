@@ -34,7 +34,7 @@ import {
     CommandItem,
 } from "@/components/ui/command";
 import { Badge } from "@/components/ui/badge";
-import Search from "@/api.ts";
+import Search from "@/api";
 
 function Address() {
     const searchParams = useSearchParams();
@@ -47,9 +47,25 @@ function Address() {
     const [isLoading, setIsLoading] = useState(false);
     const [error, setError] = useState<string | null>(null);
 
+    function setAddressValue(value: string) {
+        setAddress(() => {
+            if (value === "") updateURL("location", value);
+            updateURL("address", value);
+            return value;
+        });
+    }
+
+    function setLocationValue(location: string, address: string) {
+        setLocation(() => {
+            updateURL("location", location);
+            setAddressValue(address);
+            return location;
+        });
+    }
+
     function clear() {
-        setAddress("");
-        setLocation("");
+        setAddressValue("");
+        setLocationValue("", "");
     }
 
     const updateURL = (name: string, value: string) => {
@@ -57,18 +73,6 @@ function Address() {
             searchParams.set(name, value);
         } else {
             searchParams.delete(name);
-        }
-    };
-
-    const callUpdateURL = () => {
-        if (location || location == "") {
-            updateURL("location", location);
-        }
-        if (address || address == "") {
-            if (address == "") {
-                updateURL("location", "");
-            }
-            updateURL("address", address);
         }
     };
 
@@ -92,8 +96,10 @@ function Address() {
                     const data = await response.json();
 
                     if (data.display_name) {
-                        setLocation(`${latitude},${longitude}`);
-                        setAddress(data.display_name);
+                        setLocationValue(
+                            `${latitude},${longitude}`,
+                            data.display_name
+                        );
                     } else {
                         setError("Unable to retrieve address");
                     }
@@ -110,15 +116,13 @@ function Address() {
         );
     };
 
-    // function getCurrentPosition() {}
-
     return (
         <div className="relative">
             <Input
                 type="text"
                 value={address}
                 placeholder="Figa, road to summit fird bet. In front of kaldis coffee"
-                onChange={(e) => setAddress(e.target.value)}
+                onChange={(e) => setAddressValue(e.target.value)}
                 className="pl-20 text-lg text-black bg-white  border-none focus-visible:ring-0 focus-visible:ring-offset-0 focus-visible:border-primary"
             />
             <Button
@@ -214,7 +218,6 @@ function ReviewerFilter(props) {
             )
                 ? selectedReviewers.filter((rev) => rev !== tiktok_handler)
                 : [...selectedReviewers, tiktok_handler];
-
 
             if (newSelectedReviewers.length > 0) {
                 updateURL(newSelectedReviewers.join(","));
@@ -339,9 +342,6 @@ function ReviewerFilter(props) {
 }
 
 function GebetaSearch({ reviewers, categories }) {
-    const searchParams = useSearchParams();
-    console.log("from GebetaSearch compt");
-
     const handleClick = () => {
         Search();
     };
@@ -351,26 +351,6 @@ function GebetaSearch({ reviewers, categories }) {
             Search();
         }
     };
-
-    // useEffect(() => {
-    //     const handleSearchParamsChange = () => {
-    //         // Trigger your search API with the new params
-    //         // search();
-    //         // console.log("URL changed");
-    //         // console.log(window.location.search);
-    //     };
-
-    //     // Call initially on mount
-    //     handleSearchParamsChange();
-
-    //     // Listen for URL changes (e.g., back/forward navigation)
-    //     window.addEventListener("popstate", handleSearchParamsChange);
-
-    //     // Clean up listener on unmount
-    //     return () => {
-    //         window.removeEventListener("popstate", handleSearchParamsChange);
-    //     };
-    // }, []);
 
     return (
         <>
