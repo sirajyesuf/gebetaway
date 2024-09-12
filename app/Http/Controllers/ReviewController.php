@@ -17,17 +17,28 @@ class ReviewController extends Controller
     $selected_reviewers  = $request->input('reviewers');
     $location = $request->input('location') ?  array_map('floatval', explode(',',$request->input('location')))  : null;   
     $address = $request->input('address');
-    $categories = $request->input('categories');
+    $categories = $request->input('categories') ?  array_map('strtolower',explode(',',$request->input('categories'))) : null;
+    // dump($location);
+    // dump($address);
 
 
     $reviews = Review::query()
-    ->when($address and $location === null, function ($query, $address) {
-        return $query->whereRaw('LOWER(restaurant_address) like ?', ['%' . strtolower($address) . '%']);
+    ->when($address and $location === null, function ($query) use($address)  {
+
+        $addressParts = array_map('trim', explode(',', $address));
+
+        foreach ($addressParts as $part) {
+        $query->orWhere('restaurant_address', 'LIKE', '%' . $part . '%');
+        }
     })
     ->when($categories, function ($query, $categories) {
-        return $query->whereRaw('LOWER(categories) like ?', ['%' . strtolower($categories) . '%']);
+
+        foreach ($categories as $category) {
+            $query->orWhereJsonContains('categories', $category);
+        }
     })
     ->when($selected_reviewers, function ($query, $selected_reviewers) {
+
         return $query->whereIn('reviewer_tiktok_handler', explode(',', $selected_reviewers) );
     })
     ->get();
