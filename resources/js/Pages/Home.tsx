@@ -98,7 +98,7 @@ export default function Home(props) {
 
             <main
                 id="main"
-                className="md:container h-auto  flex flex-col gap-4  text-black p-1 "
+                className="md:container  min-h-screen h-auto  flex flex-col gap-4  text-black p-1 "
             >
                 <div className="capitalize text-2xl font-bold">Discover</div>
                 <CategoryFilter categories={props.categories} />

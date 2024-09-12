@@ -1,6 +1,6 @@
 function Video404() {
     return (
-        <div className="bg-[#f8f8f8] rounded-lg w-96 h-60 flex flex-col justify-evenly items-center px-2">
+        <div className="bg-[#f8f8f8] rounded-lg w-96 h-[600px] flex flex-col justify-center items-center gap-4 px-2">
             <div className="">
                 <img
                     width="48px"
