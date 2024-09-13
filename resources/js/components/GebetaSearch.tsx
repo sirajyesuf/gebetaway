@@ -17,6 +17,13 @@ import {
     DialogTitle,
     DialogTrigger,
 } from "@/components/ui/dialog";
+import {
+    Tooltip,
+    TooltipContent,
+    TooltipProvider,
+    TooltipTrigger,
+} from "@/components/ui/tooltip";
+
 import { ScrollArea } from "@/components/ui/scroll-area";
 
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
@@ -123,18 +130,30 @@ function Address() {
                 value={address}
                 placeholder="Figa, road to summit fird bet. In front of kaldis coffee"
                 onChange={(e) => setAddressValue(e.target.value)}
-                className="pl-20 text-lg text-black bg-white  border-none focus-visible:ring-0 focus-visible:ring-offset-0 focus-visible:border-primary"
+                className="pl-12 text-lg text-black bg-white  border-none focus-visible:ring-0 focus-visible:ring-offset-0 focus-visible:border-primary"
             />
             <Button
                 variant="outline"
                 size={null}
-                className="absolute left-1 top-1/2 -translate-y-1/2 bg-white border-none hover:bg-[#c44015] p-1 rounded-full"
+                className="absolute left-1 top-1/2 -translate-y-1/2 bg-white border-none hover:bg-gray-200 p-1 rounded-full"
                 onClick={handleGetLocation}
             >
                 {isLoading ? (
-                    <LoaderCircle className="h-6 w-6 animate-spin" />
+                    <LoaderCircle
+                        className="h-6 w-6 animate-spin"
+                        color="#488fed"
+                    />
                 ) : (
-                    <MapPin className="h-6 w-6" />
+                    <TooltipProvider>
+                        <Tooltip>
+                            <TooltipTrigger asChild>
+                                <MapPin size={30} color="#488fed" />
+                            </TooltipTrigger>
+                            <TooltipContent>
+                                <p>click to get your location</p>
+                            </TooltipContent>
+                        </Tooltip>
+                    </TooltipProvider>
                 )}
             </Button>
 

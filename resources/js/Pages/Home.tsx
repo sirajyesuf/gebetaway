@@ -135,6 +135,7 @@ export default function Home(props) {
                                 <TikTokEmbed
                                     url={review.tiktok_video_url}
                                     width={325}
+                                    placeholderSpinnerDisabled={true}
                                     placeholderImageUrl={review.thumbnail_url}
                                 />
                             </div>
