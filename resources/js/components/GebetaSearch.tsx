@@ -28,7 +28,7 @@ import { ScrollArea } from "@/components/ui/scroll-area";
 
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Separator } from "@/components/ui/separator";
-import { Reviewer as TypeReviewer } from "@/types/reviewer";
+// import { Reviewer as TypeReviewer } from "@/types/reviewer";
 import useSearchParams from "@/hooks/useUrlSearchParams";
 import { router } from "@inertiajs/react";
 import { Toggle } from "@/components/ui/toggle";

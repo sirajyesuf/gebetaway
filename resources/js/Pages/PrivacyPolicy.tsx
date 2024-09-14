@@ -1,5 +1,5 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import AppBar from "@/components/AppBar";
+import Layout from "@/components/Layout";
 export default function PrivacyPolicy() {
     const currentDate = new Date().toLocaleDateString("en-US", {
         year: "numeric",
@@ -8,9 +8,7 @@ export default function PrivacyPolicy() {
     });
 
     return (
-        <>
-            <AppBar></AppBar>
-
+        <Layout>
             <div className="container mx-auto px-4 py-8">
                 <Card className="max-w-4xl mx-auto bg-white text-black border-none shadow-none">
                     <CardHeader>
@@ -197,12 +195,10 @@ export default function PrivacyPolicy() {
                             If you have any questions about this Privacy Policy,
                             please contact us at:
                         </p>
-                        <p className="font-semibold">
-                            info@gebetaway.com
-                        </p>
+                        <p className="font-semibold">info@gebetaway.com</p>
                     </CardContent>
                 </Card>
             </div>
-        </>
+        </Layout>
     );
 }

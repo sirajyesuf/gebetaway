@@ -1,10 +1,8 @@
-import AppBar from "@/components/AppBar";
 import { Coffee, Utensils, MapPin, Star } from "lucide-react";
-
+import Layout from "@/components/Layout";
 export default function AboutUs() {
     return (
-        <>
-            <AppBar></AppBar>
+        <Layout>
             <div className="min-h-screen bg-white py-12 px-4 sm:px-6 lg:px-8">
                 <div className="max-w-3xl mx-auto">
                     <h1 className="text-4xl font-bold text-center text-amber-800 mb-8">
@@ -29,9 +27,10 @@ export default function AboutUs() {
 
                         <p className="text-gray-700">
                             Whether you're in the mood for the iconic injera or
-                            eager to experience a traditional Ethiopian coffee
-                            ceremony, GebetaWay helps you find the perfect spot
-                            to indulge.
+                            craving Ethiopia’s most loved dishes like raw meat
+                            (tere siga) or the spicy and flavorful kitfo,
+                            GebetaWay helps you find the perfect spot to
+                            indulge.
                         </p>
 
                         <div className="flex items-center space-x-4 text-amber-700">
@@ -73,6 +72,6 @@ export default function AboutUs() {
                     </div>
                 </div>
             </div>
-        </>
+        </Layout>
     );
 }
