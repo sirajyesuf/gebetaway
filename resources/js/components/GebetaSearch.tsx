@@ -73,6 +73,7 @@ function Address() {
     function clear() {
         setAddressValue("");
         setLocationValue("", "");
+        Search()
     }
 
     const updateURL = (name: string, value: string) => {

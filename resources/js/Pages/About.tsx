@@ -65,8 +65,8 @@ export default function AboutUs() {
                     <div className="mt-8 bg-amber-50 p-6 rounded-lg border border-amber-200">
                         <div className="flex items-center justify-center space-x-4 text-amber-800">
                             <Coffee className="w-8 h-8" />
-                            <p className="text-xl font-semibold">
-                                Experience the Ethiopian Coffee Ceremony
+                            <p className="text-xl font-semibold capitalize">
+                              Don't Forget To Experience the Ethiopian Coffee Ceremony.
                             </p>
                         </div>
                     </div>
