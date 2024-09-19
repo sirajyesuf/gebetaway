@@ -17,7 +17,9 @@ class AdminUserSeeder  extends Seeder
         $user = [
             'email' => $email,
             'name' => 'Gebetaway',
-            'password'=> Hash::make($password)
+            'password'=> Hash::make($password),
+            'created_at' => now(),
+            'updated_at' => now(),
         ];
         
         DB::table('users')->truncate();
