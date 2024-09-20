@@ -19,38 +19,37 @@ import {
     TooltipProvider,
     TooltipTrigger,
 } from "@/components/ui/tooltip";
+import ReviewCard from "@/components/Review";
 
-export default function Home(props) {
+interface HomeProps {
+    reviews: {
+        data: Review[];
+        links: {
+            next: string | null;
+        };
+    };
+    categories: string[];
+    reviewers: Reviewer[];
+}
+
+export default function Home({ reviews, categories, reviewers }: HomeProps) {
     const searchParams = useSearchParams();
-    console.log(props);
-    const [reviews, setReviews] = useState(props.reviews.data);
-    const [nextPageUrl, setNextPageUrl] = useState(props.reviews.links.next);
+    const [reviewsData, setReviewsData] = useState(reviews.data);
+    const [nextPageUrl, setNextPageUrl] = useState(reviews.links.next);
     const [page, setPage] = useState(1);
     const [loading, setLoading] = useState(false);
     const [hasMore, setHasMore] = useState(true);
 
-    const observerRef = useRef();
+    const observerRef = useRef<IntersectionObserver | null>(null);
 
-    // useEffect(() => {
-    //     fetchBooks(page);
-    // }, [page]);
-
-    const fetchBooks = async (page) => {
+    const fetchBooks = async (page: number) => {
         setLoading(true);
-        console.log(page);
         try {
-            // const response = await axios.get(`/reviews?page=${page}`);
-            // setReviews((prevReviews) => [
-            //     ...prevReviews,
-            //     ...response.data.data,
-            // ]);
-            // setHasMore(response.data.links.next !== null);
-
             const restaurant_name = searchParams.get("restaurant") || null;
-            const reviewers = searchParams.get("reviewers") || null;
-            let data = {};
+            const reviewerIds = searchParams.get("reviewers") || null;
+            const data: Record<string, string> = {};
             if (restaurant_name !== null) data.restaurant = restaurant_name;
-            if (reviewers !== null) data.reviewers = reviewers;
+            if (reviewerIds !== null) data.reviewers = reviewerIds;
 
             router.visit(`/?page=${page}`, {
                 method: "get",
@@ -64,86 +63,35 @@ export default function Home(props) {
         }
     };
 
-    // IntersectionObserver callback
-    const lastBookElementRef = useRef(null);
-
-    // useEffect(() => {
-    //     const options = {
-    //         root: null,
-    //         rootMargin: "0px",
-    //         threshold: 1.0,
-    //     };
-
-    //     const observer = new IntersectionObserver((entries) => {
-    //         if (entries[0].isIntersecting && hasMore && !loading) {
-    //             setPage((prevPage) => prevPage + 1); // Trigger next page load
-    //         }
-    //     }, options);
-
-    //     if (lastBookElementRef.current) {
-    //         observer.observe(lastBookElementRef.current);
-    //     }
-
-    //     return () => {
-    //         if (lastBookElementRef.current) {
-    //             observer.unobserve(lastBookElementRef.current);
-    //         }
-    //     };
-    // }, [loading, hasMore]);
-
     return (
         <>
-            <AppBar></AppBar>
-            <Hero></Hero>
+            <AppBar />
+            <Hero />
 
             <main
                 id="main"
-                className="md:container  min-h-screen h-auto  flex flex-col gap-4  text-black p-1 "
+                className="min-h-screen h-auto flex flex-col gap-4 text-black mb-16 "
             >
-                <div className="capitalize text-2xl font-bold">Discover</div>
-                <CategoryFilter categories={props.categories} />
+                <div className="container mx-auto px-4">
+                    <div className="capitalize text-2xl font-bold mb-6">Discover</div>
+                    <CategoryFilter categories={categories} />
 
-                <GebetaSearch
-                    reviewers={props.reviewers}
-                    categories={props.categories}
-                />
-                <div className="flex flex-col items-center gap-4">
-                    {reviews.length === 0 ? (
-                        <Video404 />
-                    ) : (
-                        reviews.map((review: Review, index: number) => (
-                            <div
-                                className="flex flex-col justify-center  items-center  gap-2  w-[400px] p-4"
-                                key={review.id}
-                            >
-                                <div className="bg-[#fe2c55] text-white rounded-md w-[88%] h-auto flex justify-between items-center px-2">
-                                    <p className="capitalize">
-                                        {review.restaurant_name}
-                                        {review.distance} km
-                                    </p>
-                                    <Button variant="link">
-                                        <a
-                                            href={`https://www.google.com/maps?q=${review.restaurant_location[0]},${review.restaurant_location[1]}`}
-                                            target="_blank"
-                                            rel="noopener noreferrer"
-                                        >
-                                            <Map />
-                                        </a>
-                                    </Button>
-                                </div>
-
-                                <TikTokEmbed
-                                    url={review.tiktok_video_url}
-                                    width={325}
-                                    placeholderSpinnerDisabled={true}
-                                    placeholderImageUrl={review.thumbnail_url}
-                                />
-                            </div>
-                        ))
-                    )}
+                    <GebetaSearch
+                        reviewers={reviewers}
+                        categories={categories}
+                    />
+                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 justify-items-center max-w-6xl mx-auto">
+                        {reviewsData.length === 0 ? (
+                            <Video404 />
+                        ) : (
+                            reviewsData.map((review: Review) => (
+                                <ReviewCard key={review.id} review={review} />
+                            ))
+                        )}
+                    </div>
                 </div>
             </main>
-            <Footer></Footer>
+            <Footer />
         </>
     );
 }
