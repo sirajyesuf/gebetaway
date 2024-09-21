@@ -2,8 +2,8 @@ import { Link } from "@inertiajs/react";
 
 export default function HeroWithAppBar() {
     return (
-        <div className="flex flex-col min-h-screen">
-            <section className="flex-grow flex items-center justify-center bg-gradient-to-br from-orange-500 via-red-600 to-amber-700 text-white">
+        <div className="flex flex-col min-h-screen ">
+            <section className="flex-grow flex items-center justify-center bg-gradient-to-r from-food-orange to-food-red text-white">
                 <div className="container px-4 md:px-6 py-12 md:py-24 lg:py-32">
                     <div className="flex flex-col items-center text-center space-y-8">
                         <h1 className="text-4xl font-bold tracking-tighter sm:text-5xl md:text-6xl lg:text-7xl max-w-3xl">
