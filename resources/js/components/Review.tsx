@@ -20,10 +20,10 @@ const VideoLoader = () => (
         <div className="relative w-16 h-16">
             <div className="absolute inset-0 rounded-full bg-gray-300 animate-pulse"></div>{" "}
             {/* Skeleton background */}
-            <div className="absolute inset-0 border-4 border-red-900 rounded-full animate-spin"></div>{" "}
-            {/* Spinning border */}
-            <div className="absolute inset-0 rounded-full border-4 border-t-4 border-t-red-600 border-gray-300 animate-spin"></div>{" "}
-            {/* Modern spinner */}
+            <div className="absolute inset-0 border-4 border-[#25F4EE] rounded-full animate-spin"></div>{" "}
+            {/* Spinning border with TikTok brand color */}
+            <div className="absolute inset-0 rounded-full border-4 border-t-4 border-t-[#FE2C55] border-gray-300 animate-spin"></div>{" "}
+            {/* Modern spinner with TikTok brand color */}
         </div>
     </div>
 );
@@ -37,9 +37,8 @@ interface ReviewProps {
 }
 
 const Review: React.FC<ReviewProps> = ({ review }) => {
-    console.log(review.restaurant_location[0]);
     const [isPlaying, setIsPlaying] = useState(false);
-    const [thumbnailUrl, setThumbnailUrl] = useState<string | null>(null); // Allow null initially
+    const [thumbnailUrl, setThumbnailUrl] = useState<string | null>(null);
     const [isVideoLoaded, setIsVideoLoaded] = useState(false);
 
     useEffect(() => {
