@@ -6,7 +6,7 @@ import Review from "@/types/review";
 import Reviewer from "@/types/reviewer";
 import { TikTokEmbed } from "react-social-media-embed";
 import { Button } from "@/components/ui/button";
-import { MapPin, Compass, Map } from "lucide-react";
+import { MapPin, Compass, Map, ArrowRight } from "lucide-react";
 import { router } from "@inertiajs/react";
 import useSearchParams from "@/hooks/useUrlSearchParams";
 import { Input } from "@/components/ui/input";
@@ -73,13 +73,19 @@ export default function Home({ reviews, categories, reviewers }: HomeProps) {
                 className="min-h-screen h-auto flex flex-col gap-4 text-black mb-16 "
             >
                 <div className="container mx-auto px-4">
-                    <div className="capitalize text-2xl font-bold mb-6">Discover</div>
-                    <CategoryFilter categories={categories} />
+                    <div className="flex items-center capitalize text-2xl font-bold my-6 text-[#ff5722]">
+                        <ArrowRight />
+                        Discover
+                    </div>
+                    <div className="mb-8">
+                        <CategoryFilter categories={categories} />
 
-                    <GebetaSearch
-                        reviewers={reviewers}
-                        categories={categories}
-                    />
+                        <GebetaSearch
+                            reviewers={reviewers}
+                            categories={categories}
+                        />
+                    </div>
+
                     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 justify-items-center max-w-6xl mx-auto">
                         {reviewsData.length === 0 ? (
                             <Video404 />

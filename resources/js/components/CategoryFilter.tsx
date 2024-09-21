@@ -2,14 +2,14 @@ import { useState, useEffect, useCallback } from "react";
 import { Button } from "@/components/ui/button";
 import { X } from "lucide-react";
 import useSearchParams from "@/hooks/useUrlSearchParams";
-import Search from "@/api.ts";
+import Search from "@/api"; 
 
 interface Category {
     id: string;
     name: string;
 }
 
-export default function CategoryFilter({ categories }) {
+export default function CategoryFilter({ categories }: { categories: Category[] }) {
     const searchParams = useSearchParams();
 
     const [selectedCategories, setSelectedCategories] = useState<string[]>(
@@ -49,7 +49,7 @@ export default function CategoryFilter({ categories }) {
 
     return (
         <div className="p-2 flex md:flex-row flex-col gap-2 md:items-center">
-            <h2 className="text-lg font-bold capitalize">category</h2>
+            <h2 className="text-lg font-bold capitalize text-[#ff5722]">categories</h2>
             <div className="flex flex-wrap gap-2">
                 {categories.map((category: Category) => (
                     <Button
@@ -61,18 +61,19 @@ export default function CategoryFilter({ categories }) {
                         }
                         onClick={() => toggleCategory(category.name)}
                         className={`
-             bg-white
+             bg-[#e5e7eb]
              text-black
               rounded-full 
               text-sm
-              py-0
+              py-1
               h-auto
               transition-all 
               duration-200 
               capitalize
+              border-none
               ${
                   selectedCategories.includes(category.name)
-                      ? "pr-1 pl-2 border-2 border-[#c63f16]"
+                      ? "px-2 py-0 border-2 bg-[#ff5722] text-white hover:bg-[#ca3b19]"
                       : "px-4"
               }
             `}

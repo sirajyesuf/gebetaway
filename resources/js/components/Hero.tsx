@@ -15,20 +15,14 @@ export default function HeroWithAppBar() {
                             Ethiopian cuisine, from injera to traditional coffee
                             ceremonies.
                         </p>
-                        <div className="flex flex-col sm:flex-row gap-4">
+                        {/* <div className="self-start">
                             <Link
                                 href="#main"
                                 className="inline-flex h-12 items-center justify-center rounded-md bg-white text-orange-600 px-8 text-base font-medium shadow transition-colors hover:bg-orange-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-offset-2 focus-visible:ring-offset-orange-600"
                             >
-                                Explore Now
+                               Start Exploring
                             </Link>
-                            <Link
-                                href="#"
-                                className="inline-flex h-12 items-center justify-center rounded-md border-2 border-white bg-transparent px-8 text-base font-medium text-white shadow transition-colors hover:bg-white hover:text-orange-600 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-offset-2 focus-visible:ring-offset-orange-600"
-                            >
-                                Contact Us
-                            </Link>
-                        </div>
+                        </div> */}
                     </div>
                 </div>
             </section>

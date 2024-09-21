@@ -73,7 +73,7 @@ function Address() {
     function clear() {
         setAddressValue("");
         setLocationValue("", "");
-        Search()
+        Search();
     }
 
     const updateURL = (name: string, value: string) => {
@@ -145,16 +145,7 @@ function Address() {
                         color="#488fed"
                     />
                 ) : (
-                    <TooltipProvider>
-                        <Tooltip>
-                            <TooltipTrigger asChild>
-                                <MapPin size={30} color="#488fed" />
-                            </TooltipTrigger>
-                            <TooltipContent>
-                                <p>click to get your location</p>
-                            </TooltipContent>
-                        </Tooltip>
-                    </TooltipProvider>
+                    <MapPin size={30} color="#488fed" />
                 )}
             </Button>
 
@@ -375,7 +366,7 @@ function GebetaSearch({ reviewers, categories }) {
     return (
         <>
             <div className="flex flex-col justify-center  border-none p-1">
-                <div className="w-full border-2 border-[#ca3b19] px-2  rounded-full  flex justify-between  items-center gap-2 py-[2px]">
+                <div className="w-full border-2 border-[#ff5722] px-2  rounded-full  flex justify-between  items-center gap-2 py-[2px]">
                     <div
                         className="w-[90%]"
                         onKeyDown={(e) => handleKeyDown(e)}
@@ -383,7 +374,7 @@ function GebetaSearch({ reviewers, categories }) {
                         <Address></Address>
                     </div>
                     <Button
-                        className="bg-[#ca3b19] border-2 border-none rounded-full text-[rgb(249,245,245)] text-md hover:bg-black hidden md:block"
+                        className="bg-[#ff5722] border-2 border-none rounded-full text-[rgb(249,245,245)] text-md hover:bg-[#e64a19] hidden md:block" // Updated hover background color
                         onClick={() => handleClick()}
                     >
                         Search
