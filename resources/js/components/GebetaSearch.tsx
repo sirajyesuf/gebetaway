@@ -52,20 +52,20 @@ function Address() {
     const [address, setAddress] = useState(searchParams.get("address") || "");
 
     const [isLoading, setIsLoading] = useState(false);
-    const [error, setError] = useState<string | null>(null);
 
     function setAddressValue(value: string) {
+        if (value === "") updateURL("location", value);
+        updateURL("address", value);
+
         setAddress(() => {
-            if (value === "") updateURL("location", value);
-            updateURL("address", value);
             return value;
         });
     }
 
     function setLocationValue(location: string, address: string) {
+        updateURL("location", location);
+        setAddressValue(address);
         setLocation(() => {
-            updateURL("location", location);
-            setAddressValue(address);
             return location;
         });
     }
@@ -169,11 +169,11 @@ function Reviewer({ reviewer }) {
     return (
         <span className="flex space-x-2 items-center p-[3px]">
             <Avatar className="border-2 border-[#ff3b5c]">
-                <AvatarImage
-                    src="https://p16-sign-va.tiktokcdn.com/tos-maliva-avt-0068/dd5ec6adf36e6b504ecf0f0989e24c26~c5_1080x1080.jpeg?lk3s=a5d48078&nonce=22065&refresh_token=34caa5b9f42d94f71b1ba957db90bfa9&x-expires=1724547600&x-signature=KO9RQK47fHaDiXZhm6dIvUDzEjw%3D&shp=a5d48078&shcp=81f88b70"
-                    alt="@shadcn"
-                />
-                <AvatarFallback className="bg-white">SG</AvatarFallback>
+                <AvatarFallback className="bg-white">
+
+                    {reviewer.charAt(0).toUpperCase()}
+                    {reviewer.charAt(1).toUpperCase()}
+                </AvatarFallback>
             </Avatar>
             <span>{reviewer.toUpperCase()}</span>
         </span>
@@ -335,7 +335,7 @@ function ReviewerFilter(props) {
                                             <Button
                                                 size="lg"
                                                 variant="ghost"
-                                                className="rounded-none w-[100%] h-[20] flex items-center text-left justify-between px-4 py-2"
+                                                className="rounded-none w-[100%] h-[20] flex items-center text-left justify-between px-4 py-2 capitalize"
                                             >
                                                 no result found
                                             </Button>
@@ -374,7 +374,7 @@ function GebetaSearch({ reviewers, categories }) {
                         <Address></Address>
                     </div>
                     <Button
-                        className="bg-[#ff5722] border-2 border-none rounded-full text-[rgb(249,245,245)] text-md hover:bg-[#e64a19] hidden md:block" // Updated hover background color
+                        className="bg-gradient-to-r from-[#ff5722] to-[#e64a19] border-2 border-none rounded-full text-white text-md hover:shadow-lg transition-transform transform hover:scale-105 hidden md:block" // Updated to a gradient background and added hover effects
                         onClick={() => handleClick()}
                     >
                         Search
